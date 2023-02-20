@@ -1,0 +1,14 @@
+Librerias usadas:
+
+https://datatables.net/extensions/select/
+JQuery
+DataTable{
+    select,
+    keys,
+    searchPanes,
+    buttons
+}
+
+Mas librerias disponibles para datatabla en: https://datatables.net/download/release
+
+
