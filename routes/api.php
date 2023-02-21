@@ -22,4 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Ruta para DataTable
 Route::get('/datosTablas', [apiController::class,'getTablasJSON'])->name('datosTablas');
 
+//Ruta para DataTable usuarios
+Route::get('/datosUsuarios', [apiController::class,'getUsersJSON'])->name('datosUsuarios');
+
 

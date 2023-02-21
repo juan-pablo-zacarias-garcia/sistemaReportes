@@ -17,7 +17,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('tablas')" :active="request()->routeIs('tablas')">
+                    <x-nav-link :href="route('viewUsuarios')" :active="request()->routeIs('viewUsuarios')">
                         Usuarios
                     </x-nav-link>
                 </div>

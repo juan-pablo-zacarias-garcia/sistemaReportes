@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class apiController extends Controller
 {
@@ -14,6 +16,13 @@ class apiController extends Controller
         $jsonString= datatables()->query(DB::table('tablas')->where('CODIGO1','!=', '0'))->toJson();
         return $jsonString;
     }
+    //retorna un JSON con los usuarios de la bd
+    public function getUsersJSON(){
+        $jsonString= DataTables::of(User::all())->toJson();
+        return $jsonString;
+    }
+
+
     /**
      * Display a listing of the resource.
      *

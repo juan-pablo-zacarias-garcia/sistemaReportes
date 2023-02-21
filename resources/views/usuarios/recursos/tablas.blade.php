@@ -1,4 +1,5 @@
 <x-app-layout class="col-md-9">
+@if (Auth::user()->isAdmin==0)
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/select.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/keyTable.dataTables.min.css')}}" />
@@ -327,5 +328,8 @@
         });
     });
     </script>
+@else
+    <h1>Acceso denegado</h1>
+@endif
 
 </x-app-layout>

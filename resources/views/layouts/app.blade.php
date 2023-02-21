@@ -16,7 +16,12 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+        @if (Auth::user()->isAdmin==1)    
+            @include('admin.navbar_admin')
+        @endif
+        @if (Auth::user()->isAdmin==0)    
+            @include('usuarios.navbar_user')
+        @endif
 
             <!-- Page Heading -->
             @if (isset($header))

@@ -23,7 +23,6 @@
         @if (Auth::user()->isAdmin==0)    
             @include('usuarios.navbar_user')
         @endif
-
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white dark:bg-gray-800 shadow">
