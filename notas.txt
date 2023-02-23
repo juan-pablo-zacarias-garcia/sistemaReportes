@@ -2,6 +2,7 @@ Librerias usadas:
 
 https://datatables.net/extensions/select/
 JQuery
+JQuery-confirm
 DataTable{
     select,
     keys,

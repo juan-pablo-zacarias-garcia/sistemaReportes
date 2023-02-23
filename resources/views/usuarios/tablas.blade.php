@@ -1,5 +1,5 @@
-<x-app-layout class="col-md-9">
-@if (Auth::user()->isAdmin==0)
+<x-app-layout>
+    @if (Auth::user()->isAdmin==0)
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/select.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/keyTable.dataTables.min.css')}}" />
@@ -9,70 +9,72 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-12 lg:px-12 space-y-12">
             <div class="p-4 sm:p-12 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                    <div class="col-md-12 ">
-                        <h3>Tablas</h3>
-                        <hr>
-                        <table id="tablas" class="table table-bordered table-condensed table-striped col-md-12">
-                            <thead>
-                                <tr>
-                                    <th>MES</th>
-                                    <th>SEMANA</th>
-                                    <th>TABLA</th>
-                                    <th>PRODUCTO</th>
-                                    <th>CODIGO</th>
-                                    <th>HECTAREAS</th>
-                                    <th>RANCHO</th>
-                                    <th>OBSERVACIONES</th>
-                                    <th>REND_KG_X_HA</th>
-                                    <th>KGS_TOTALES</th>
-                                    <th>PLANTULA1</th>
-                                    <th>AGROQUIMICOS1</th>
-                                    <th>FERTILIZANTES1</th>
-                                    <th>MANO_DE_OBRA1</th>
-                                    <th>FLETES1</th>
-                                    <th>RENTA1</th>
-                                    <th>MAQUILA1</th>
-                                    <th>EMPAQUE1</th>
-                                    <th>TOTAL_DIRECTOS1</th>
-                                    <th>TOTAL_INDIRECTOS1</th>
-                                    <th>TOTAL_COSTO1</th>
-                                    <th>COSTO_X_HA1</th>
-                                    <th>COSTO_DE_EMPAQUE1</th>
-                                    <th>NO_CAJAS1</th>
-                                    <th>MANO_DE_OBRA2</th>
-                                    <th>FLETES2</th>
-                                    <th>MAQUILA2 </th>
-                                    <th>EMPAQUE2</th>
-                                    <th>TOTAL_COSTO_EMPAQUE1</th>
-                                    <th>CAJAS_MERMADAS1</th>
-                                    <th>NO_CAJAS2</th>
-                                    <th>MANO_DE_OBRA3</th>
-                                    <th>FLETES3</th>
-                                    <th>MAQUILA3</th>
-                                    <th>EMPAQUE3</th>
-                                    <th>TOTAL_MERMAS1</th>
-                                    <th>COSTO_TOTAL1 </th>
-                                    <th>VENTAS_EXPOR1</th>
-                                    <th>VENTAS_EMPAQUE1</th>
-                                    <th>VENTAS_TAYLOR1</th>
-                                    <th>VENTAS_FRESH_EXPRESS1</th>
-                                    <th>VENTAS_GRANEL1</th>
-                                    <th>VENTAS_RANCHO_VIEJO1</th>
-                                    <th>VENTAS_ROYAL_ROSE1</th>
-                                    <th>VENTAS_AVALON1</th>
-                                    <th>COM_MONTERREY1</th>
-                                    <th>COM_GUADALAJARA1</th>
-                                    <th>VENTAS_ESA_FRESH1</th>
-                                    <th>OTROS_CLIENTES1</th>
-                                    <th>VENTAS_TOTALES1</th>
-                                    <th>UTILIDAD_O_PERDIDA1</th>
-                                </tr>
-                            </thead>
+                <div class="col-md-12 ">
+                    <h3>Tablas</h3>
+                    <hr>
+                    <table id="tablas" class="table table-bordered table-condensed table-striped col-md-12">
+                        <thead>
+                            <tr>
+                                <th>MES</th>
+                                <th>SEMANA</th>
+                                <th>TABLA</th>
+                                <th>PRODUCTO</th>
+                                <th>CODIGO</th>
+                                <th>HECTAREAS</th>
+                                <th>RANCHO</th>
+                                <th>OBSERVACIONES</th>
+                                <th>REND_KG_X_HA</th>
+                                <th>KGS_TOTALES</th>
+                                <th>PLANTULA1</th>
+                                <th>AGROQUIMICOS1</th>
+                                <th>FERTILIZANTES1</th>
+                                <th>MANO_DE_OBRA1</th>
+                                <th>FLETES1</th>
+                                <th>RENTA1</th>
+                                <th>MAQUILA1</th>
+                                <th>EMPAQUE1</th>
+                                <th>TOTAL_DIRECTOS1</th>
+                                <th>TOTAL_INDIRECTOS1</th>
+                                <th>TOTAL_COSTO1</th>
+                                <th>COSTO_X_HA1</th>
+                                <th>COSTO_DE_EMPAQUE1</th>
+                                <th>NO_CAJAS1</th>
+                                <th>MANO_DE_OBRA2</th>
+                                <th>FLETES2</th>
+                                <th>MAQUILA2 </th>
+                                <th>EMPAQUE2</th>
+                                <th>TOTAL_COSTO_EMPAQUE1</th>
+                                <th>CAJAS_MERMADAS1</th>
+                                <th>NO_CAJAS2</th>
+                                <th>MANO_DE_OBRA3</th>
+                                <th>FLETES3</th>
+                                <th>MAQUILA3</th>
+                                <th>EMPAQUE3</th>
+                                <th>TOTAL_MERMAS1</th>
+                                <th>COSTO_TOTAL1 </th>
+                                <th>VENTAS_EXPOR1</th>
+                                <th>VENTAS_EMPAQUE1</th>
+                                <th>VENTAS_TAYLOR1</th>
+                                <th>VENTAS_FRESH_EXPRESS1</th>
+                                <th>VENTAS_GRANEL1</th>
+                                <th>VENTAS_RANCHO_VIEJO1</th>
+                                <th>VENTAS_ROYAL_ROSE1</th>
+                                <th>VENTAS_AVALON1</th>
+                                <th>COM_MONTERREY1</th>
+                                <th>COM_GUADALAJARA1</th>
+                                <th>VENTAS_ESA_FRESH1</th>
+                                <th>OTROS_CLIENTES1</th>
+                                <th>VENTAS_TOTALES1</th>
+                                <th>UTILIDAD_O_PERDIDA1</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
 
-                        </table>
+                    </table>
 
 
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -106,14 +108,19 @@
                     "previous": "Anterior"
                 }
             },
-            scrollX: 400,
+            scrollX: true,
             scrollY: 400,
             select: true,
             keys: true,
             searchPanes: {
                 cascadePanes: true,
                 initCollapsed: true,
-                columns: [0, 1, 3, 6]
+                columns: [0, 1, 3, 6],
+                dtOpts: {
+                    select: {
+                        style: 'multi'
+                    }
+                }
             },
             dom: 'Plfrtip',
             ajax: {
@@ -328,8 +335,8 @@
         });
     });
     </script>
-@else
+    @else
     <h1>Acceso denegado</h1>
-@endif
+    @endif
 
 </x-app-layout>
