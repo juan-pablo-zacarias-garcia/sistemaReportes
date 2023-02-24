@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\apiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +17,4 @@ use App\Http\Controllers\Api\apiController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-//Ruta para DataTable
-Route::get('/datosTablas', [apiController::class,'getTablasJSON'])->name('datosTablas');
-
-//Ruta para DataTable usuarios
-Route::get('/datosUsuarios', [apiController::class,'getUsersJSON'])->name('datosUsuarios');
-
 

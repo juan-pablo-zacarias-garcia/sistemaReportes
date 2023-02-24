@@ -1,3 +1,4 @@
+
 @if (Auth::user()->isAdmin==1)
 <form method="POST" action="{{ route('registerUser') }}" class="mt-6 space-y-6">
     @csrf

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
@@ -18,7 +19,8 @@ class apiController extends Controller
     }
     //retorna un JSON con los usuarios de la bd
     public function getUsersJSON(){
-        $jsonString= DataTables::of(User::all())->toJson();
+        $id = Auth::user()->id;
+        $jsonString= DataTables::of(User::where("id","!=",$id))->toJson();
         return $jsonString;
     }
 

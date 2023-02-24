@@ -20,6 +20,10 @@ class usuariosController extends Controller
     public function FormNewUser(){
         return view('admin.recursos.formNewUser');
     }
+    public function FormEditUser($idUser){
+        $user = User::where('id','=',$idUser);
+        return view('admin.recursos.formEditUser',['user'=>$user]);         
+    }
     public function tablaUsuarios(){
         return view('admin.recursos.tablaUsuarios');
     }
@@ -42,13 +46,22 @@ class usuariosController extends Controller
         return $this->viewUsuarios();
     }
 
+    //Edita usuario en la base de datos
+    public function updateUser(Request $request)
+    {
+        dd($request);
+
+        return null;
+    }
+
+
+    //Elimina un usuario
     public function deleteUser($idUser){
-        $user = User::where('id', $idUser);
         $deletedUser=User::where('id',"=", $idUser)->delete();
         if($deletedUser){
-            return response()->json(null);
+            return true;
         }else{
-            return response()->json(error);
+            return false;
         }
          
     }

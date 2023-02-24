@@ -48,43 +48,76 @@
             }
         });
 
-        //obtiene el valor del input oculto
-        $('#delUser').on('click',function(){
-            idUser = document.getElementById('idUser').value;
-            emailUser = document.getElementById('emailUser').value;
+        //Editar usuario
+        $("#editUser").confirm({
+            title: 'Editar usuario',
+            content: function() {
+                //carga el formulario para editar el usaurio
+                id = document.getElementById("idUser").value;
+                url = "/FormEditUser/" + id;
+                return 'url:' + url;
+            },
+            buttons: {
+                Cerrar: function() {}
+            }
         });
 
 
         //Elimina usuario
-        
+
         $("#delUser").confirm({
-            title: 'Eliminar usuario',
-            content: "El usuario" + idUser + " será eliminado del sistema",
+            title: 'Advertencia',
+            content: function() {
+                return "El usuario " + document.getElementById("emailUser").value +
+                    " será eliminado";
+            },
             buttons: {
                 confirm: function() {
-
+                    id=document.getElementById("idUser").value;
+                    email=document.getElementById('emailUser').value;
+                    //Ajax para eliminar el usuario
+                    $.ajax({
+                        url: "/deleteUser/" + id,
+                        type: 'get',
+                        success: function(data) {
+                            if (data.result != 'true') {
+                                $.alert('El usuario ' + email +" ha sido eliminado");
+                            }else{
+                                $.alert("Ha ocurrido un error al eliminar el usuario "+email);
+                            }
+                        }
+                    });
+                    //fin de ajax
+                    
+                    //cargamos la tabla de los usuarios
+                    $("#tablaUsuarios").load('/tablaUsuarios');
+                    //Reinicimos los botones 
+                    document.getElementById("editUser").hidden = true;
+                    document.getElementById("delUser").hidden = true;
+                    rowSelected = null;
+                    //Cambiamos el valor de los inputs ocultos en la vista Usuarios
+                    document.getElementById('idUser').value = "";
+                    document.getElementById('emailUser').value = "";
                 },
-                cancel: function() {
-                    $.alert('Canceled!');
-                }
+                cancel: function() {}
             }
         });
 
+
     });
+
+
 
     function deleteUser(id) {
         $.ajax({
             url: "/deleteUser/" + id,
             type: 'get',
-            success: function(response) {
-                //cargamos la tabla de los usuarios
-                $("#tablaUsuarios").load('/tablaUsuarios');
+            success: function(data) {
+                if (data.result != 'true') {
+                    alert('El usuario ya existe: ');
+                }
             }
-        })
-    }
-
-    function editUser() {
-        window.alert("hola");
+        });
     }
     </script>
     @else
