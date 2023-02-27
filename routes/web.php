@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\mainController;
 use App\Http\Controllers\Admin\usuariosController;
+use App\Http\Controllers\Usuarios\usuariosComunController;
 
 use App\Http\Controllers\Api\apiController;
 use Illuminate\Http\Request;
@@ -18,24 +19,31 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+/////////////////////////////////////rutas para todos los usuarios///////////////////////////////////////////
 Route::get('/', function () {
     return view('auth.login');
 });
 
 Route::get('/home', [mainController::class, 'home'])->middleware(['auth', 'verified'])->name('home');
-
-Route::get('/tablas', function () {
-    return view('usuarios.tablas');
-})->middleware(['auth', 'verified'])->name('tablas');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); 
 });
 
-//rutas de admin
+/////////////////////////////////////rutas de usaurios comunes///////////////////////////////////////////
+
+Route::get('/tablas', function () {
+    return view('usuarios.tablas');
+})->middleware(['auth', 'verified'])->name('tablas');
+
+//Retorna la tabla horizontal
+Route::get('/tablaHorizontal',[usuariosComunController::class, 'tablaHorizontal'])->middleware(['auth', 'verified'])->name('tablaHorizontal');
+
+
+
+
+/////////////////////////////////////rutas de admin///////////////////////////////////////////
 
 //Retorna la vista de la tabla de usuarios
 Route::get('/viewUsuarios',[usuariosController::class, 'viewUsuarios'])->middleware(['auth', 'verified'])->name('viewUsuarios');
@@ -55,11 +63,13 @@ Route::get('/tablaUsuarios',[usuariosController::class, 'tablaUsuarios'])->middl
 
 
 //Rutas de la API
+//Usuarios comunes
 //Ruta para DataTable
-Route::get('/datosTablas', [apiController::class,'getTablasJSON'])->name('datosTablas');
+Route::get('/datosTablas', [apiController::class,'getTablasJSON'])->middleware(['auth', 'verified'])->name('datosTablas');
 
+//Admin
 //Ruta para DataTable usuarios
-Route::get('/datosUsuarios', [apiController::class,'getUsersJSON'])->name('datosUsuarios');
+Route::get('/datosUsuarios', [apiController::class,'getUsersJSON'])->middleware(['auth', 'verified'])->name('datosUsuarios');
 
 
 
