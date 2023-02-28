@@ -39,6 +39,8 @@ Route::get('/tablas', function () {
 
 //Retorna la tabla horizontal
 Route::get('/tablaHorizontal',[usuariosComunController::class, 'tablaHorizontal'])->middleware(['auth', 'verified'])->name('tablaHorizontal');
+//retorna la tabla de costos por hectarea
+Route::get('/tablaCostoXHa',[usuariosComunController::class, 'tablaCostoXHa'])->middleware(['auth', 'verified'])->name('tablaCostoXHa');
 
 
 

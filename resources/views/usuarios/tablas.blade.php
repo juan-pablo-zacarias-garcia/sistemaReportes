@@ -15,8 +15,19 @@
                     <div id="tablaHorizontal">
 
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-12 lg:px-12 space-y-12">
+            <div class="p-4 sm:p-12 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div class="col-md-12 ">
+                    <h3>Costos por Hectarea</h3>
+                    <hr>
+                    <div id="tablaCostosXHa">
 
-
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,6 +41,8 @@
     <script type="text/javascript">
     //cargamos la tabla de los usuarios
     $("#tablaHorizontal").load('/tablaHorizontal');
+    //cargamos la tabla de costos por hectarea
+    $("#tablaCostosXHa").load('/tablaCostoXHa');
     </script>
     @else
     <h1>Acceso denegado</h1>

@@ -1,4 +1,5 @@
 @if (Auth::user()->isAdmin==1)
+<x-ejemplo/>
 <table id="usuarios" class="table table-bordered table-condensed table-striped col-md-12">
     <thead>
         <tr>
