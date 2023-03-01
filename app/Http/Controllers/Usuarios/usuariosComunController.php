@@ -22,45 +22,53 @@ class usuariosComunController extends Controller
      //Retorna la tabla costoXHa
      public function tablaCostoXHa(){
         if(auth()->user()->isAdmin==0){
+            //consulta para obtener todos los ranchos que existen
+            $queryRanchos=DB::select("Select DISTINCT RANCHO1 as RANCHOS from tablas where RANCHO1!='0' order by RANCHO1 ASC;");
             
-            $datos = DB::select("
-            SELECT PRODUCTO1,
-            CASE WHEN [BUENA VISTA] IS NULL THEN 0
-                ELSE [BUENA VISTA]
-            END AS [BUENA VISTA],
-            CASE WHEN [EL PINO] IS NULL THEN 0
-                ELSE [EL PINO]
-            END AS [EL PINO],
-            CASE WHEN [FLORENCIA] IS NULL THEN 0
-                ELSE [FLORENCIA]
-            END AS [FLORENCIA],
-            CASE WHEN [LA CANTERA] IS NULL THEN 0
-                ELSE [LA CANTERA]
-            END AS [LA CANTERA],
-            CASE WHEN [LA ESTACADA] IS NULL THEN 0
-                ELSE [LA ESTACADA]
-            END AS [LA ESTACADA],
-            CASE WHEN [LABRADORES] IS NULL THEN 0
-                ELSE [LABRADORES]
-            END AS [LABRADORES],
-            CASE WHEN [PUERTO DE SOSA] IS NULL THEN 0
-                ELSE [PUERTO DE SOSA]
-            END AS [PUERTO DE SOSA],
-            CASE WHEN [SAN ANDRES] IS NULL THEN 0
-                ELSE [SAN ANDRES]
-            END AS [SAN ANDRES]
-            FROM (select RANCHO1, PRODUCTO1,  sum(TOTAL_COSTO1)/sum(HECTAREAS1) CostoXHa from tablas where RANCHO1!='0' group by RANCHO1, PRODUCTO1) as tabla PIVOT (
-                sum(CostoXHa) FOR RANCHO1 IN ([BUENA VISTA],[EL PINO],[FLORENCIA],[LA CANTERA],[LA ESTACADA],[LABRADORES],[PUERTO DE SOSA],[SAN ANDRES])
-            ) as tabla2;");
+            
 
-            //Sacamos los encabezados de la tabla
-            $headers = [];
+            //Definimos las partes de la consulta
+            $queryP1='';
+            $queryP2='';
+            $queryP3='';
+
+            foreach($queryRanchos as $r){
+                foreach($r as $d){
+                    $queryP1 = $queryP1.'tablaCostoXHa.['.$d.'],';
+                    $queryP2 = $queryP2.'CASE WHEN ['.$d.'] IS NULL THEN 0 ELSE ['.$d.'] END AS ['.$d.'],';
+                    $queryP3 = $queryP3.'['.$d.'],';
+                }
+            }
+            
+            //Quitamos la última coma que se le agrega
+            $queryP1 = substr($queryP1, 0, strlen($queryP1)-1); 
+            $queryP2 = substr($queryP2, 0, strlen($queryP2)-1); 
+            $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
+
+
+            //formamos la parte de casos de la consulta para que los nulos los cambie por cero
+            $query="with tablaTotalCostoXHa as (select PRODUCTO1,RANCHO1,  sum(TOTAL_COSTO1)/sum(HECTAREAS1) CostoXHa from tablas where RANCHO1!='0' group by  PRODUCTO1, RANCHO1)
+            select tablaTotalCostoXHa.PRODUCTO1 as PRODUCTO,".$queryP1.", sum(tablaTotalCostoXHa.CostoXHa) TotalCostoXHa from tablaTotalCostoXHa
+            join
+            (SELECT PRODUCTO1,
+            ".$queryP2."
+            FROM (select RANCHO1, PRODUCTO1,  sum(TOTAL_COSTO1)/sum(HECTAREAS1) CostoXHa from tablas where RANCHO1!='0' group by RANCHO1, PRODUCTO1) as tabla PIVOT (
+                sum(CostoXHa) FOR RANCHO1 IN (".$queryP3.")
+            ) as tabla2) as tablaCostoXHa 
+            on tablaTotalCostoXHa.PRODUCTO1 = tablaCostoXHa.PRODUCTO1 
+            group by tablaTotalCostoXHa.PRODUCTO1, ".$queryP1.";";
+
+            $datos = DB::select($query);
+                        
+            //almacenamos los valores de los encabezados de la tabla 
+            $headers = array();
             while (current($datos[0])) {
-                $headers = key($datos[0]);
+                $headers[]= key($datos[0]);
                 next($datos[0]);
             }
+            
             //mandamos los datos para formar la tabla de la tabla
-            return view('usuarios.recursos.costosxha',['datos'=>$datos]);
+            return view('usuarios.recursos.costosxha',['datos'=>$datos, 'headers'=>$headers]); 
         }
         else{
             return view("home");
@@ -70,7 +78,6 @@ class usuariosComunController extends Controller
 
     //////////////////////////////////servicios web////////////////////////////////
     
-    //devuelve la tabla Costo x Hectarea
     
 
 
