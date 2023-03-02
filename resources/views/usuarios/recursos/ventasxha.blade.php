@@ -1,4 +1,4 @@
-<table id="tablaCostoXHa" class="table table-bordered table-condensed table-striped col-md-8">
+<table id="tablaVentasXHa" class="table table-bordered table-condensed table-striped col-md-8">
     <thead>
         <tr>
             @foreach ($headers as $header)
@@ -19,11 +19,11 @@
 <!-- La API de DATATABLE nos permite realizar operaciones con los datos de la tabla -->
 <script src="{{asset('assets/js/sum().js')}}"></script>
 <script type="text/javascript">
-var tablaCostoXHa;
+var tablaVentasXHa;
 $(document).ready(
     function() {
 
-        tablaCostoXHa = $('#tablaCostoXHa').DataTable({
+        tablaVentasXHa = $('#tablaVentasXHa').DataTable({
             'iDisplayLength': 25,
             language: {
                 "decimal": "",
@@ -59,11 +59,12 @@ $(document).ready(
             currency: 'USD',
             minimumFractionDigits: 2
         })
+
         //agregamos la fila de totales
-        for (var i = 1; i < tablaCostoXHa.columns().count(); i++) {
-            filatotales.push(formatter.format(tablaCostoXHa.column(i).data().sum()));
+        for (var i = 1; i < tablaVentasXHa.columns().count(); i++) {
+            filatotales.push(formatter.format(tablaVentasXHa.column(i).data().sum()));
         }
-        fila = tablaCostoXHa.row.add(filatotales).draw(false);
+        fila = tablaVentasXHa.row.add(filatotales).draw(false);
     }
 );
 </script>

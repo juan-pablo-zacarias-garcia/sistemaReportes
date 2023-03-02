@@ -12,6 +12,58 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+/* CSS Personalizado */
+#menu-check{
+  display: none;
+}
+#menu-check + label{
+  cursor: pointer;
+  display: inline-block;
+}
+.btn-menu{
+  width: 40px;
+  height: 40px;
+  border: 1px solid #555;
+  position: relative;
+}
+.btn-menu > div{
+  position: absolute;
+  width: 60%;
+  height: 10%;
+  left: 20%;
+  background-color: #333;
+  border-radius: 3px;
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+.stick1{
+  top: 22%;
+}
+.stick2{
+  top: 45%;
+}
+.stick3{
+  bottom: 22%;
+}
+#menu-check:checked + label .stick1{
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  top: 45%;
+  width: 70%;
+  left: 15%;
+}
+#menu-check:checked + label .stick2{
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  top: 45%;
+  width: 70%;
+  left: 15%;
+}
+#menu-check:checked + label .stick3{
+  height: 0;
+}
+
+
 :root {
   --bs-blue: #4582ec;
   --bs-indigo: #6610f2;

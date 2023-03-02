@@ -1,4 +1,4 @@
-<table id="tablas" class="table table-bordered table-condensed table-striped col-md-12">
+<table id="tablas" class="table table-bordered table-condensed table-striped col-md-6">
     <thead>
         <tr>
             <th>MES</th>

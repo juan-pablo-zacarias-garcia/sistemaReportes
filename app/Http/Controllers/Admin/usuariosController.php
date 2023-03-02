@@ -15,7 +15,7 @@ class usuariosController extends Controller
     //////////////////////////////////servicios web////////////////////////////////
     //Devuelve los usuarios registrados menos el usuario autenticado en la sesion
     public function viewUsuarios(){
-        if(auth()->user()->isAdmin){
+        if(auth()->user()->type==0){
             $idUserAuth = auth()->user()->id;
             $users = DataTables::of(User::where('id','!=',$idUserAuth))->results();
             return view('admin.Usuarios',['users'=>$users]);
@@ -29,7 +29,7 @@ class usuariosController extends Controller
 
     //////////////////////////////////Formularios////////////////////////////////
     public function FormNewUser(){
-        if(auth()->user()->isAdmin){
+        if(auth()->user()->type==0){
             return view('admin.recursos.formNewUser');
         }
         else{
@@ -37,7 +37,7 @@ class usuariosController extends Controller
         }
     }
     public function FormEditUser($idUser){
-        if(auth()->user()->isAdmin){
+        if(auth()->user()->type==0){
             $user = User::where('id','=',$idUser);
             return view('admin.recursos.formEditUser',['user'=>$user]); 
         }
@@ -48,7 +48,7 @@ class usuariosController extends Controller
 
     //////////////////////////////////Vistas////////////////////////////////
     public function tablaUsuarios(){
-        if(auth()->user()->isAdmin){
+        if(auth()->user()->type==0){
             return view('admin.recursos.tablaUsuarios');
         }
         else{
@@ -61,7 +61,7 @@ class usuariosController extends Controller
     //Registra un nuevo usuario en la base de datos
     public function registerUser(Request $request)
     {
-        if(auth()->user()->isAdmin){
+        if(auth()->user()->type==0){
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
@@ -85,7 +85,7 @@ class usuariosController extends Controller
     //Edita usuario en la base de datos
     public function updateUser(Request $request)
     {
-        if(auth()->user()->isAdmin){
+        if(auth()->user()->type==0){
             $user = User::find($request->id);
             if(isset($request->name)){
                 $user->name = $request->name;
@@ -96,8 +96,8 @@ class usuariosController extends Controller
             if(isset($request->password)){
                 $user->password = Hash::make($request->password);
             }
-            if(isset($request->isAdmin)){
-                $user->isAdmin = $request->isAdmin;
+            if(isset($request->type)){
+                $user->type = $request->type;
             }
             
             $user->save();
@@ -114,7 +114,7 @@ class usuariosController extends Controller
 
     //Elimina un usuario
     public function deleteUser($idUser){
-        if(auth()->user()->isAdmin){
+        if(auth()->user()->type==0){
             $deletedUser=User::where('id',"=", $idUser)->delete();
             if($deletedUser){
                 return true;

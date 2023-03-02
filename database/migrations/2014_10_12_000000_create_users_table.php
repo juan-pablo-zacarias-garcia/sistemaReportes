@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->integer('isAdmin')->default(0);
+            $table->integer('type')->default(1);
         });
     }
 

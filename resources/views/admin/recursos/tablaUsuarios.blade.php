@@ -1,5 +1,4 @@
-@if (Auth::user()->isAdmin==1)
-<x-ejemplo/>
+@if (Auth::user()->type==0)
 <table id="usuarios" class="table table-bordered table-condensed table-striped col-md-12">
     <thead>
         <tr>
@@ -61,7 +60,7 @@ $(document).ready(function() {
                 name: 'Fecha de registro'
             },
             {
-                data: 'isAdmin',
+                data: 'type',
                 name: 'Rol'
             },
         ]

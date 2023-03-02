@@ -3,6 +3,7 @@ Librerias usadas:
 https://datatables.net/extensions/select/
 JQuery
 JQuery-confirm
+mmenujs
 DataTable{
     select,
     keys,

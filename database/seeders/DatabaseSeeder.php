@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'practicante2@agnieto.com',
             'password' => Hash::make('1380JpLm'),
-            'isAdmin' => 1
+            'type' => 0
         ]);
     }
 }

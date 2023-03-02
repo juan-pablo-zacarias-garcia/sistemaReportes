@@ -1,5 +1,5 @@
 
-@if (Auth::user()->isAdmin==1)
+@if (Auth::user()->type==0)
 <form method="POST" action="{{ route('registerUser') }}" class="mt-6 space-y-6">
     @csrf
     <!-- Name -->
