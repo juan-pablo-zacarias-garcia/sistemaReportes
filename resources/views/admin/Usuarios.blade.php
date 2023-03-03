@@ -58,7 +58,7 @@
                 return 'url:' + url;
             },
             buttons: {
-                Cerrar: function() {}
+                Cerrar: function() {} 
             }
         });
 

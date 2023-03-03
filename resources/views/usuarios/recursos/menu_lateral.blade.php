@@ -33,16 +33,19 @@
     <!-- The menu -->
     <nav id="menu">
         <ul>
-            <li><a href="/"><img src="{{asset('assets/img/agricola_nieto.png')}}" class="rounded mx-auto d-block" width="50%" alt="AgricolaNieto"></a></li>
+            <li><a href="/"><img src="{{asset('assets/img/agricola_nieto.png')}}" class="rounded mx-auto d-block"
+                        width="50%" alt="AgricolaNieto"></a></li>
             <li><a href="{{route('tablas')}}">Tablas</a></li>
-            <li><span>About us</span>
+            <li><span>Documentos</span>
                 <ul>
-                    <li><a href="/about/history">History</a></li>
-                    <li><span>The team</span>
+                    <li><span>RH</span>
                         <ul>
-                            <li><a href="/about/team/management">Management</a></li>
-                            <li><a href="/about/team/sales">Sales</a></li>
-                            <li><a href="/about/team/development">Development</a></li>
+                            <li><a href="#">Documento1</a></li>
+                        </ul>
+                    </li>
+                    <li><span>Finanzas</span>
+                        <ul>
+                            <li><a href="#">Documento1</a></li>
                         </ul>
                     </li>
                 </ul>

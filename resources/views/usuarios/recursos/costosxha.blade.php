@@ -1,3 +1,7 @@
+<br/>
+<br/>
+<h4>Costos por Hectarea</h4>
+<hr>
 <table id="tablaCostoXHa" class="table table-bordered table-condensed table-striped col-md-8">
     <thead>
         <tr>
