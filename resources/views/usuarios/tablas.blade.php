@@ -16,44 +16,44 @@
                         <hr>
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a id="1"  type="button" class="nav-link active">Horizontal</a>
+                                <a id="1" type="button" class="nav-link active">Horizontal</a>
                             </li>
                             <li class="nav-item">
-                                <a id="2"  type="button" class="nav-link">Costos por
+                                <a id="2" type="button" class="nav-link">Costos por
                                     hectarea</a>
                             </li>
                             <li class="nav-item">
-                                <a id="3"  type="button" class="nav-link">
+                                <a id="3" type="button" class="nav-link">
                                     Ventas por
                                     hectarea</a>
                             </li>
                             <li class="nav-item">
-                                <a id="4"  type="button" class="nav-link">
+                                <a id="4" type="button" class="nav-link">
                                     Rendimiento
                                     por hectarea</a>
                             </li>
                             <li class="nav-item">
-                                <a id="5"  type="button" href="#" class="nav-link">
+                                <a id="5" type="button" href="#" class="nav-link">
                                     Resultados por
                                     cultivo</a>
                             </li>
                             <li class="nav-item">
-                                <a id="6"  type="button" href="#" class="nav-link">
+                                <a id="6" type="button" href="#" class="nav-link">
                                     Agroquímicos
                                     por hectarea</a>
                             </li>
                             <li class="nav-item">
-                                <a id="7"  type="button" href="#" class="nav-link">
+                                <a id="7" type="button" href="#" class="nav-link">
                                     Fertilizantes
                                     por hectarea</a>
                             </li>
                             <li class="nav-item">
-                                <a id="8"  type="button" href="#" class="nav-link">
+                                <a id="8" type="button" href="#" class="nav-link">
                                     Plántula por
                                     hectarea</a>
                             </li>
                             <li class="nav-item">
-                                <a id="0"  type="button" class="nav-link">Todas las
+                                <a id="0" type="button" class="nav-link">Todas las
                                     tablas</a>
                             </li>
                         </ul>
@@ -75,34 +75,50 @@
     <script type="text/javascript">
     $(document).ready(function() {
 
-        //cargamos la tabla de los usuarios
-        //$("#divHorizontal").load('/tablaHorizontal');
+
+        ////Cargamos la tabla selecionada
+
+        activo = '1';
+        //cargamos la tabla horizontal
         thl = $.ajax({
             url: "/tablaHorizontal",
             type: "GET",
-        }).done(function() {});
+        });
         //cargamos la tabla de costos por hectarea
-        //$("#divCostosXHa").load('/tablaCostoXHa');
         tcxh = $.ajax({
             url: "/tablaCostoXHa",
             type: "GET",
-        }).done(function() {
-
         });
         //cargamos la tabla de ventas por hectarea
-        //$("#divVentasXHa").load('/tablaVentasXHa');
         tvxh = $.ajax({
             url: "/tablaVentasXHa",
             type: "GET",
-        }).done(function() {
-
+        });
+        //cargamos la tabla de rendimiento por hectarea
+        trxh = $.ajax({
+            url: "/tablaRendimientoXHa",
+            type: "GET",
+        });
+        //cargamos la tabla de resultados por cultivo
+        trxc = $.ajax({
+            url: "/tablaResultadosXCultivo",
+            type: "GET",
+        });
+        //cargamos la tabla de agroquímicos por hectarea
+        taxh = $.ajax({
+            url: "/tablaAgroquimicosXHa",
+            type: "GET",
+        });
+        tfxh = $.ajax({
+            url: "/tablaFertilizantesXHa",
+            type: "GET",
         });
 
-        ////Cargamos la tabla selecionada
-        //por defecto es el horizontal
-        $("#pricipal").append(thl.responseText);
+        tpxh = $.ajax({
+            url: "/tablaPlantulaXHa",
+            type: "GET",
+        });
 
-        activo = '1';
         //horizontal
         $("#1").click(function() {
             MostrarTabla('1', thl);
@@ -115,6 +131,28 @@
         $("#3").click(function() {
             MostrarTabla('3', tvxh);
         });
+        //tablaRendimientoXHa
+        $("#4").click(function() {
+            MostrarTabla('4', trxh);
+        });
+        //tablaResultadosXCultivo
+        $("#5").click(function() {
+            MostrarTabla('5', trxc);
+        });
+        //tablaResultadosXCultivo
+        $("#6").click(function() {
+            MostrarTabla('6', taxh);
+        });
+        //tablaFertilizantesXHa
+        $("#7").click(function() {
+            MostrarTabla('7', tfxh);
+        });
+
+        //tablaPlantulaXHa
+        $("#8").click(function() {
+            MostrarTabla('8', tpxh);
+        });
+
 
         //Todas las tablas
         $("#0").click(function() {
@@ -122,16 +160,21 @@
             $("#pricipal").append(thl.responseText);
             $("#pricipal").append(tcxh.responseText);
             $("#pricipal").append(tvxh.responseText);
+            $("#pricipal").append(trxh.responseText);
+            $("#pricipal").append(trxc.responseText);
+            $("#pricipal").append(taxh.responseText);
+            $("#pricipal").append(tfxh.responseText);
+            $("#pricipal").append(tpxh.responseText);
 
-            $('#'+activo).removeClass("active");
+            $('#' + activo).removeClass("active");
             $("#0").addClass("active");
-            activo="0";
+            activo = "0";
         });
 
-        function MostrarTabla(choosen, tabla){
-            $('#'+activo).removeClass("active");
+        function MostrarTabla(choosen, tabla) {
+            $('#' + activo).removeClass("active");
             $("#pricipal").empty();
-            $("#"+choosen).addClass("active");
+            $("#" + choosen).addClass("active");
             $("#pricipal").append(tabla.responseText);
             activo = choosen;
         }

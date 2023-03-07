@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Usuarios;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\DataTables;
-use Illuminate\Http\Request;
 
 class usuariosComunController extends Controller
 {
@@ -13,7 +11,17 @@ class usuariosComunController extends Controller
     //Retorna la tabla horizontal
     public function tablaHorizontal(){
         if(auth()->user()->type==1){
-            return view('usuarios.recursos.horizontal');
+            $datos = DB::select("SELECT * from tablas WHERE CODIGO!='0' ");
+            //almacenamos los valores de los encabezados de la tabla 
+            $headers = array();
+
+            while (current($datos[0])!=null) {
+                $headers[]= key($datos[0]);
+                next($datos[0]);
+            }
+                      
+            //mandamos los datos para formar la tabla de la tabla
+            return view('usuarios.recursos.tablas.horizontal',['datos'=>$datos, 'headers'=>$headers]); 
         }
         else{
             return view("home");
@@ -24,7 +32,7 @@ class usuariosComunController extends Controller
      public function tablaCostoXHa(){
         if(auth()->user()->type==1){
             //consulta para obtener todos los ranchos que existen
-            $queryRanchos=DB::select("Select DISTINCT RANCHO1 as RANCHOS from tablas where RANCHO1!='0' order by RANCHO1 ASC;");
+            $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
             
             
 
@@ -48,16 +56,16 @@ class usuariosComunController extends Controller
 
 
             //formamos la parte de casos de la consulta para que los nulos los cambie por cero
-            $query="with tablaTotalCostoXHa as (select PRODUCTO1,RANCHO1,  sum(TOTAL_COSTO1)/sum(HECTAREAS1) CostoXHa from tablas where RANCHO1!='0' group by  PRODUCTO1, RANCHO1)
-            select tablaTotalCostoXHa.PRODUCTO1 as PRODUCTO,".$queryP1.", sum(tablaTotalCostoXHa.CostoXHa) Total from tablaTotalCostoXHa
+            $query="with tablaTotalCostoXHa as (select PRODUCTO,RANCHO,  sum(TOTAL_COSTO)/sum(HECTAREAS) CostoXHa from tablas where RANCHO!='0' group by  PRODUCTO, RANCHO)
+            select tablaTotalCostoXHa.PRODUCTO as PRODUCTO,".$queryP1.", sum(tablaTotalCostoXHa.CostoXHa) Total from tablaTotalCostoXHa
             join
-            (SELECT PRODUCTO1,
+            (SELECT PRODUCTO,
             ".$queryP2."
-            FROM (select RANCHO1, PRODUCTO1,  sum(TOTAL_COSTO1)/sum(HECTAREAS1) CostoXHa from tablas where RANCHO1!='0' group by RANCHO1, PRODUCTO1) as tabla PIVOT (
-                sum(CostoXHa) FOR RANCHO1 IN (".$queryP3.")
+            FROM (select RANCHO, PRODUCTO,  sum(TOTAL_COSTO)/sum(HECTAREAS) CostoXHa from tablas where RANCHO!='0' group by RANCHO, PRODUCTO) as tabla PIVOT (
+                sum(CostoXHa) FOR RANCHO IN (".$queryP3.")
             ) as tabla2) as tablaCostoXHa 
-            on tablaTotalCostoXHa.PRODUCTO1 = tablaCostoXHa.PRODUCTO1 
-            group by tablaTotalCostoXHa.PRODUCTO1, ".$queryP1.";";
+            on tablaTotalCostoXHa.PRODUCTO = tablaCostoXHa.PRODUCTO 
+            group by tablaTotalCostoXHa.PRODUCTO, ".$queryP1.";";
 
             $datos = DB::select($query);
                         
@@ -69,7 +77,7 @@ class usuariosComunController extends Controller
             }
             
             //mandamos los datos para formar la tabla de la tabla
-            return view('usuarios.recursos.costosxha',['datos'=>$datos, 'headers'=>$headers]); 
+            return view('usuarios.recursos.tablas.costosxha',['datos'=>$datos, 'headers'=>$headers]); 
         }
         else{
             return view("home");
@@ -80,10 +88,7 @@ class usuariosComunController extends Controller
     public function tablaVentasXHa(){
         if(auth()->user()->type==1){
             //consulta para obtener todos los ranchos que existen
-            $queryRanchos=DB::select("Select DISTINCT RANCHO1 as RANCHOS from tablas where RANCHO1!='0' order by RANCHO1 ASC;");
-            
-            
-
+            $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
             //Definimos las partes de la consulta
             $queryP1='';
             $queryP2='';
@@ -102,18 +107,17 @@ class usuariosComunController extends Controller
             $queryP2 = substr($queryP2, 0, strlen($queryP2)-1); 
             $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
 
-
             //formamos la parte de casos de la consulta para que los nulos los cambie por cero
-            $query="with tablaTotalVentasXHa as (select PRODUCTO1,RANCHO1,  sum(VENTAS_TOTALES1)/sum(HECTAREAS1) VentasXHa from tablas where RANCHO1!='0' group by  PRODUCTO1, RANCHO1)
-            select tablaTotalVentasXHa.PRODUCTO1 as PRODUCTO,".$queryP1.", sum(VentasXHa) TotalVentasXHa from tablaTotalVentasXHa
+            $query="with tablaTotalVentasXHa as (select PRODUCTO,RANCHO,  sum(VENTAS_TOTALES)/sum(HECTAREAS) VentasXHa from tablas where RANCHO!='0' group by  PRODUCTO, RANCHO)
+            select tablaTotalVentasXHa.PRODUCTO as PRODUCTO,".$queryP1.", sum(VentasXHa) TotalVentasXHa from tablaTotalVentasXHa
             join(
-            SELECT PRODUCTO1,
+            SELECT PRODUCTO,
             ".$queryP2."
-            FROM (select RANCHO1, PRODUCTO1,  sum(VENTAS_TOTALES1)/sum(HECTAREAS1) VentasXHa from tablas where RANCHO1!='0' group by RANCHO1, PRODUCTO1) as tabla PIVOT (
-                sum(VEntasXHa) FOR RANCHO1 IN (".$queryP3.")
+            FROM (select RANCHO, PRODUCTO,  sum(VENTAS_TOTALES)/sum(HECTAREAS) VentasXHa from tablas where RANCHO!='0' group by RANCHO, PRODUCTO) as tabla PIVOT (
+                sum(VEntasXHa) FOR RANCHO IN (".$queryP3.")
                 ) as tabla2 ) as tablaVentasXHa
-                on tablaTotalVentasXHa.PRODUCTO1 = tablaVentasXHa.PRODUCTO1 
-                group by tablaTotalVentasXHa.PRODUCTO1, ".$queryP1.";";
+                on tablaTotalVentasXHa.PRODUCTO = tablaVentasXHa.PRODUCTO 
+                group by tablaTotalVentasXHa.PRODUCTO, ".$queryP1.";";
 
             $datos = DB::select($query);
                         
@@ -122,19 +126,267 @@ class usuariosComunController extends Controller
             while (current($datos[0])) {
                 $headers[]= key($datos[0]);
                 next($datos[0]);
-            }
-            
+            }  
             //mandamos los datos para formar la tabla de la tabla
-            return view('usuarios.recursos.ventasxha',['datos'=>$datos, 'headers'=>$headers]); 
+            return view('usuarios.recursos.tablas.ventasxha',['datos'=>$datos, 'headers'=>$headers]); 
         }
         else{
             return view("home");
         }
     }
 
-    //////////////////////////////////servicios web////////////////////////////////
+        //Retorna la tabla rendimiento x hectarea
+    public function tablaRendimientoXHa(){
+            if(auth()->user()->type==1){
+                //consulta para obtener todos los ranchos que existen
+                $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
+                //Definimos las partes de la consulta
+                $queryP1='';
+                $queryP2='';
+                $queryP3='';
     
+                foreach($queryRanchos as $r){
+                    foreach($r as $d){
+                        $queryP1 = $queryP1.'tablaRendimientoXHa.['.$d.'],';
+                        $queryP2 = $queryP2.'CASE WHEN ['.$d.'] IS NULL THEN 0 ELSE ['.$d.'] END AS ['.$d.'],';
+                        $queryP3 = $queryP3.'['.$d.'],';
+                    }
+                }
+                
+                //Quitamos la última coma que se le agrega
+                $queryP1 = substr($queryP1, 0, strlen($queryP1)-1); 
+                $queryP2 = substr($queryP2, 0, strlen($queryP2)-1); 
+                $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
     
+                //formamos la parte de casos de la consulta para que los nulos los cambie por cero
+                $query="with tablaTotalRendimientoXHa as (select PRODUCTO,RANCHO,  sum(KGS_TOTALES)/sum(HECTAREAS) RendimientoXHa from tablas where RANCHO!='0' group by  PRODUCTO, RANCHO)
+                select tablaTotalRendimientoXHa.PRODUCTO,".$queryP1.",sum(RendimientoXHa) TotalRendimientoXHa from tablaTotalRendimientoXHa
+                join (
+                SELECT PRODUCTO,
+                ".$queryP2."
+                FROM (select RANCHO, PRODUCTO,  sum(KGS_TOTALES)/sum(HECTAREAS) RendimientoXHa from tablas where RANCHO!='0' group by RANCHO, PRODUCTO) as tabla PIVOT (
+                    sum(RendimientoXHa) FOR RANCHO IN (".$queryP3.")
+                    ) as tabla2 ) as tablaRendimientoXHa
+                    on tablaTotalRendimientoXHa.PRODUCTO = tablaRendimientoXHa.PRODUCTO 
+                    group by tablaTotalRendimientoXHa.PRODUCTO,".$queryP1.";";
+    
+                $datos = DB::select($query);
+                            
+                //almacenamos los valores de los encabezados de la tabla 
+                $headers = array();
+                while (current($datos[0])) {
+                    $headers[]= key($datos[0]);
+                    next($datos[0]);
+                }  
+                //mandamos los datos para formar la tabla de la tabla
+                return view('usuarios.recursos.tablas.rendimientoxha',['datos'=>$datos, 'headers'=>$headers]); 
+            }
+            else{
+                return view("home");
+            }
+    }
+
+   public function tablaResultadosXCultivo(){
+    if(auth()->user()->type==1){
+        //consulta para obtener todos los ranchos que existen
+        $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
+        //Definimos las partes de la consulta
+        $queryP1='';
+        $queryP2='';
+        $queryP3='';
+
+        foreach($queryRanchos as $r){
+            foreach($r as $d){
+                $queryP1 = $queryP1.'tablaResultadosXCultivo.['.$d.'],';
+                $queryP2 = $queryP2.'CASE WHEN ['.$d.'] IS NULL THEN 0 ELSE ['.$d.'] END AS ['.$d.'],';
+                $queryP3 = $queryP3.'['.$d.'],';
+            }
+        }
+        
+        //Quitamos la última coma que se le agrega
+        $queryP1 = substr($queryP1, 0, strlen($queryP1)-1); 
+        $queryP2 = substr($queryP2, 0, strlen($queryP2)-1); 
+        $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
+
+        //formamos la parte de casos de la consulta para que los nulos los cambie por cero
+        $query="with tablaTotalResultadosXCultivo as (select PRODUCTO,RANCHO,  sum(UTILIDAD_O_PERDIDA)/sum(HECTAREAS) ResultadosXCultivo from tablas where RANCHO!='0' group by  PRODUCTO, RANCHO)
+        select tablaTotalResultadosXCultivo.PRODUCTO,".$queryP1.",sum(ResultadosXCultivo) TotalResultadosXCultivo from tablaTotalResultadosXCultivo
+        join (
+        SELECT PRODUCTO,
+        ".$queryP2."
+        FROM (select RANCHO, PRODUCTO,  sum(UTILIDAD_O_PERDIDA)/sum(HECTAREAS) ResultadosXCultivo from tablas where RANCHO!='0' group by RANCHO, PRODUCTO) as tabla PIVOT (
+            sum(ResultadosXCultivo) FOR RANCHO IN (".$queryP3.")
+            ) as tabla2 ) as tablaResultadosXCultivo
+            on tablaTotalResultadosXCultivo.PRODUCTO = tablaResultadosXCultivo.PRODUCTO 
+            group by tablaTotalResultadosXCultivo.PRODUCTO,".$queryP1.";";
+
+        $datos = DB::select($query);
+                    
+        //almacenamos los valores de los encabezados de la tabla 
+        $headers = array();
+        while (current($datos[0])) {
+            $headers[]= key($datos[0]);
+            next($datos[0]);
+        }  
+        //mandamos los datos para formar la tabla de la tabla
+        return view('usuarios.recursos.tablas.resultadosxcultivo',['datos'=>$datos, 'headers'=>$headers]); 
+    }
+    else{
+        return view("home");
+    }
+   }
+
+   public function tablaAgroquimicosXHa(){
+    if(auth()->user()->type==1){
+        //consulta para obtener todos los ranchos que existen
+        $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
+        //Definimos las partes de la consulta
+        $queryP1='';
+        $queryP2='';
+        $queryP3='';
+
+        foreach($queryRanchos as $r){
+            foreach($r as $d){
+                $queryP1 = $queryP1.'tablaAgroquimicosXHa.['.$d.'],';
+                $queryP2 = $queryP2.'CASE WHEN ['.$d.'] IS NULL THEN 0 ELSE ['.$d.'] END AS ['.$d.'],';
+                $queryP3 = $queryP3.'['.$d.'],';
+            }
+        }
+        
+        //Quitamos la última coma que se le agrega
+        $queryP1 = substr($queryP1, 0, strlen($queryP1)-1); 
+        $queryP2 = substr($queryP2, 0, strlen($queryP2)-1); 
+        $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
+
+        //formamos la parte de casos de la consulta para que los nulos los cambie por cero
+        $query="with tablaTotalAgroquimicosXHa as (select PRODUCTO,RANCHO,  sum(AGROQUIMICOS)/sum(HECTAREAS) AgroquimicosXHa from tablas where RANCHO!='0' group by  PRODUCTO, RANCHO)
+        select tablaTotalAgroquimicosXHa.PRODUCTO,".$queryP1.",sum(AgroquimicosXHa) TotalAgroquimicosXHa from tablaTotalAgroquimicosXHa
+        join (
+        SELECT PRODUCTO,
+        ".$queryP2."
+        FROM (select RANCHO, PRODUCTO,  sum(AGROQUIMICOS)/sum(HECTAREAS) AgroquimicosXHa from tablas where RANCHO!='0' group by RANCHO, PRODUCTO) as tabla PIVOT (
+            sum(AgroquimicosXHa) FOR RANCHO IN (".$queryP3.")
+            ) as tabla2 ) as tablaAgroquimicosXHa
+            on tablaTotalAgroquimicosXHa.PRODUCTO = tablaAgroquimicosXHa.PRODUCTO 
+            group by tablaTotalAgroquimicosXHa.PRODUCTO,".$queryP1.";";
+
+        $datos = DB::select($query);
+                    
+        //almacenamos los valores de los encabezados de la tabla 
+        $headers = array();
+        while (current($datos[0])) {
+            $headers[]= key($datos[0]);
+            next($datos[0]);
+        }  
+        //mandamos los datos para formar la tabla de la tabla
+        return view('usuarios.recursos.tablas.agroquimicosxha',['datos'=>$datos, 'headers'=>$headers]); 
+    }
+    else{
+        return view("home");
+    }
+   }
+    
+
+   public function tablaFertilizantesXHa(){
+    if(auth()->user()->type==1){
+        //consulta para obtener todos los ranchos que existen
+        $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
+        //Definimos las partes de la consulta
+        $queryP1='';
+        $queryP2='';
+        $queryP3='';
+
+        foreach($queryRanchos as $r){
+            foreach($r as $d){
+                $queryP1 = $queryP1.'tablaFertilizantesXHa.['.$d.'],';
+                $queryP2 = $queryP2.'CASE WHEN ['.$d.'] IS NULL THEN 0 ELSE ['.$d.'] END AS ['.$d.'],';
+                $queryP3 = $queryP3.'['.$d.'],';
+            }
+        }
+        
+        //Quitamos la última coma que se le agrega
+        $queryP1 = substr($queryP1, 0, strlen($queryP1)-1); 
+        $queryP2 = substr($queryP2, 0, strlen($queryP2)-1); 
+        $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
+
+        //formamos la parte de casos de la consulta para que los nulos los cambie por cero
+        $query="with tablaTotalFertilizantesXHa as (select PRODUCTO,RANCHO,  sum(FERTILIZANTES)/sum(HECTAREAS) FertilizantesXHa from tablas where RANCHO!='0' group by  PRODUCTO, RANCHO)
+        select tablaTotalFertilizantesXHa.PRODUCTO,".$queryP1.",sum(FertilizantesXHa) TotalFertilizantesXHa from tablaTotalFertilizantesXHa
+        join (
+        SELECT PRODUCTO,
+        ".$queryP2."
+        FROM (select RANCHO, PRODUCTO,  sum(FERTILIZANTES)/sum(HECTAREAS) FertilizantesXHa from tablas where RANCHO!='0' group by RANCHO, PRODUCTO) as tabla PIVOT (
+            sum(FertilizantesXHa) FOR RANCHO IN (".$queryP3.")
+            ) as tabla2 ) as tablaFertilizantesXHa
+            on tablaTotalFertilizantesXHa.PRODUCTO = tablaFertilizantesXHa.PRODUCTO 
+            group by tablaTotalFertilizantesXHa.PRODUCTO,".$queryP1.";";
+
+        $datos = DB::select($query);
+                    
+        //almacenamos los valores de los encabezados de la tabla 
+        $headers = array();
+        while (current($datos[0])) {
+            $headers[]= key($datos[0]);
+            next($datos[0]);
+        }  
+        //mandamos los datos para formar la tabla de la tabla
+        return view('usuarios.recursos.tablas.fertilizantesxha',['datos'=>$datos, 'headers'=>$headers]); 
+    }
+    else{
+        return view("home");
+    }
+   }
+    
+
+   public function tablaPlantulaXHa(){
+    if(auth()->user()->type==1){
+        //consulta para obtener todos los ranchos que existen
+        $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
+        //Definimos las partes de la consulta
+        $queryP1='';
+        $queryP2='';
+        $queryP3='';
+
+        foreach($queryRanchos as $r){
+            foreach($r as $d){
+                $queryP1 = $queryP1.'tablaPlantulaXHa.['.$d.'],';
+                $queryP2 = $queryP2.'CASE WHEN ['.$d.'] IS NULL THEN 0 ELSE ['.$d.'] END AS ['.$d.'],';
+                $queryP3 = $queryP3.'['.$d.'],';
+            }
+        }
+        
+        //Quitamos la última coma que se le agrega
+        $queryP1 = substr($queryP1, 0, strlen($queryP1)-1); 
+        $queryP2 = substr($queryP2, 0, strlen($queryP2)-1); 
+        $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
+
+        //formamos la parte de casos de la consulta para que los nulos los cambie por cero
+        $query="with tablaTotalPlantulaXHa as (select PRODUCTO,RANCHO,  sum(PLANTULA)/sum(HECTAREAS) PlantulaXHa from tablas where RANCHO!='0' group by  PRODUCTO, RANCHO)
+        select tablaTotalPlantulaXHa.PRODUCTO,".$queryP1.",sum(PlantulaXHa) TotalPlantulaXHa from tablaTotalPlantulaXHa
+        join (
+        SELECT PRODUCTO,
+        ".$queryP2."
+        FROM (select RANCHO, PRODUCTO,  sum(PLANTULA)/sum(HECTAREAS) PlantulaXHa from tablas where RANCHO!='0' group by RANCHO, PRODUCTO) as tabla PIVOT (
+            sum(PlantulaXHa) FOR RANCHO IN (".$queryP3.")
+            ) as tabla2 ) as tablaPlantulaXHa
+            on tablaTotalPlantulaXHa.PRODUCTO = tablaPlantulaXHa.PRODUCTO 
+            group by tablaTotalPlantulaXHa.PRODUCTO,".$queryP1.";";
+
+        $datos = DB::select($query);
+                    
+        //almacenamos los valores de los encabezados de la tabla 
+        $headers = array();
+        while (current($datos[0])) {
+            $headers[]= key($datos[0]);
+            next($datos[0]);
+        }  
+        //mandamos los datos para formar la tabla de la tabla
+        return view('usuarios.recursos.tablas.plantulaxha',['datos'=>$datos, 'headers'=>$headers]); 
+    }
+    else{
+        return view("home");
+    }
+   }
 
 
 }

@@ -1,8 +1,8 @@
 <br/>
 <br/>
-<h4>Costos por Hectarea</h4>
+<h4>Agroquímicos por hectarea</h4>
 <hr>
-<table id="tablaCostoXHa" class="table table-bordered table-condensed table-striped col-md-8">
+<table id="tablaAgroquimicosXHa" class="table table-bordered table-condensed table-striped col-md-8">
     <thead>
         <tr>
             @foreach ($headers as $header)
@@ -14,7 +14,7 @@
         @foreach($datos as $fila)
         <tr>
             @foreach($fila as $dato)
-            <td>{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</td>
+            <td>{{$dato==0?'':(is_numeric($dato)?'$ '.number_format($dato, 2):$dato)}}</td>
             @endforeach
         </tr>
         @endforeach
@@ -23,11 +23,11 @@
 <!-- La API de DATATABLE nos permite realizar operaciones con los datos de la tabla -->
 <script src="{{asset('assets/js/sum().js')}}"></script>
 <script type="text/javascript">
-var tablaCostoXHa;
+var tablaAgroquimicosXHa;
 $(document).ready(
     function() {
 
-        tablaCostoXHa = $('#tablaCostoXHa').DataTable({
+        tablaAgroquimicosXHa = $('#tablaAgroquimicosXHa').DataTable({
             'iDisplayLength': 25,
             language: {
                 "decimal": "",
@@ -63,11 +63,12 @@ $(document).ready(
             currency: 'USD',
             minimumFractionDigits: 2
         })
+
         //agregamos la fila de totales
-        for (var i = 1; i < tablaCostoXHa.columns().count(); i++) {
-            filatotales.push(formatter.format(tablaCostoXHa.column(i).data().sum()));
-        }
-        fila = tablaCostoXHa.row.add(filatotales).draw(false);
+        // for (var i = 1; i < tablaRendimientoXHa.columns().count(); i++) {
+        //     filatotales.push(tablaRendimientoXHa.column(i).data().sum());
+        // }
+        // fila = tablaRendimientoXHa.row.add(filatotales).draw(false);
     }
 );
 </script>

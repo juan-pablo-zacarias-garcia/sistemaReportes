@@ -20,10 +20,10 @@
      <div class="form-group">
          <label>Rol</label>
          <br />
-         <label><input name="type" value='0' type="radio" {{$user->value("type")==0?'checked':''}}>Usuario</label>
+         <label><input name="type" value='1' type="radio" {{$user->value("type")==1?'checked':''}}>Usuario</label>
          <br />
-         <label><input name="type" value='1' type="radio"
-                 {{$user->value("type")==1?'checked':''}}>Administrador</label>
+         <label><input name="type" value='0' type="radio"
+                 {{$user->value("type")==0?'checked':''}}>Administrador</label>
      </div>
      <div class="flex items-center justify-end mt-4">
          <button id="editUserForm"

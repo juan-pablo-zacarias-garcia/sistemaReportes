@@ -15,7 +15,7 @@ class apiController extends Controller
     //Retorna un JSON con los datos de la bd en la propiedad data
     public function getTablasJSON(){
         if(auth()->user()->type==1){
-            $jsonString= datatables()->query(DB::table('tablas')->where('CODIGO1','!=', '0'))->toJson();
+            $jsonString= datatables()->query(DB::table('tablas')->where('CODIGO','!=', '0'))->toJson();
             return $jsonString;
         }else{
             return view("home");
