@@ -1,5 +1,5 @@
-<br/>
-<br/>
+<br />
+<br />
 <h4>Resultados por cultivo</h4>
 <hr>
 <table id="tablaResultadosXCultivo" class="table table-bordered table-condensed table-striped col-md-8">
@@ -26,6 +26,9 @@
 var tablaResultadosXCultivo;
 $(document).ready(
     function() {
+
+        // Si existe una instancia condatatable la eliminamos para poder reiniciarla
+        $('#tablaResultadosXCultivo').dataTable().fnDestroy();
 
         tablaResultadosXCultivo = $('#tablaResultadosXCultivo').DataTable({
             'iDisplayLength': 25,

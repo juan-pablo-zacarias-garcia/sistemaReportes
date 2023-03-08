@@ -1,5 +1,5 @@
-<br/>
-<br/>
+<br />
+<br />
 <h4>Costos por Hectarea</h4>
 <hr>
 <table id="tablaCostoXHa" class="table table-bordered table-condensed table-striped col-md-8">
@@ -12,9 +12,21 @@
     </thead>
     <tbody>
         @foreach($datos as $fila)
+        @php
+        reset($datos[0]);
+        @endphp
         <tr>
             @foreach($fila as $dato)
+            @if (is_numeric($dato))
+            <td><a
+                    href="/tablaDetalle/tablaCostoXHa/{{$anio.'/'.$fila->PRODUCTO.'/'.key($datos[0])}}">{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</a>
+            </td>
+            @else
             <td>{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</td>
+            @endif
+            @php
+            next($datos[0]);
+            @endphp
             @endforeach
         </tr>
         @endforeach
@@ -26,6 +38,8 @@
 var tablaCostoXHa;
 $(document).ready(
     function() {
+        // Si existe una instancia condatatable la eliminamos para poder reiniciarla
+        $('#tablaCostoXHa').dataTable().fnDestroy();
 
         tablaCostoXHa = $('#tablaCostoXHa').DataTable({
             'iDisplayLength': 25,
@@ -68,6 +82,8 @@ $(document).ready(
         //     filatotales.push(formatter.format(tablaCostoXHa.column(i).data().sum()));
         // }
         // fila = tablaCostoXHa.row.add(filatotales).draw(false);
+
+
     }
 );
 </script>

@@ -1,8 +1,8 @@
-<br/>
-<br/>
+<br />
+<br />
 <h4>Horizontal</h4>
 <hr>
-<table id="tablaHorizontal" class="table table-bordered table-condensed table-striped col-md-8">
+<table id="tablaHorizontal" class="table table-bordered table-condensed table-striped col-md-8 hidden">
     <thead>
         <tr>
             @foreach ($headers as $header)
@@ -26,7 +26,9 @@
 var tablaHorizontal;
 $(document).ready(
     function() {
-
+        // Si existe una instancia condatatable la eliminamos para poder reiniciarla
+        $('#tablaHorizontal').dataTable().fnDestroy();
+        $('#tablaHorizontal').removeClass('hidden');
         tablaHorizontal = $('#tablaHorizontal').DataTable({
             'iDisplayLength': 25,
             language: {
@@ -49,13 +51,23 @@ $(document).ready(
                     "previous": "Anterior"
                 }
             },
+            dom: 'Plfrtip',
+            searchPanes: {
+                initCollapsed: true,
+                columns: [1, 4, 7],
+                dtOpts: {
+                    select: {
+                        style: 'multi'
+                    }
+                }
+            },
             scrollX: true,
             scrollY: 400,
             select: true,
             keys: true
         });
 
-        
+
 
         //agregamos la fila de totales
         // for (var i = 1; i < tablaVentasXHa.columns().count(); i++) {

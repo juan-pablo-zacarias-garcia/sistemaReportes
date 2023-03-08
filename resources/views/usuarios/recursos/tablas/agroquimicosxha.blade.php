@@ -1,5 +1,5 @@
-<br/>
-<br/>
+<br />
+<br />
 <h4>Agroquímicos por hectarea</h4>
 <hr>
 <table id="tablaAgroquimicosXHa" class="table table-bordered table-condensed table-striped col-md-8">
@@ -26,6 +26,8 @@
 var tablaAgroquimicosXHa;
 $(document).ready(
     function() {
+        // Si existe una instancia condatatable la eliminamos para poder reiniciarla
+        $('#tablaAgroquimicosXHa').dataTable().fnDestroy();
 
         tablaAgroquimicosXHa = $('#tablaAgroquimicosXHa').DataTable({
             'iDisplayLength': 25,

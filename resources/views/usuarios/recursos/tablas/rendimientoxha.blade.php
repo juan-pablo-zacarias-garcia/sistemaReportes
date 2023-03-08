@@ -1,5 +1,5 @@
-<br/>
-<br/>
+<br />
+<br />
 <h4>Rendimiento por Hectarea</h4>
 <hr>
 <table id="tablaRendimientoXHa" class="table table-bordered table-condensed table-striped col-md-8">
@@ -26,7 +26,9 @@
 var tablaRendimientoXHa;
 $(document).ready(
     function() {
-
+        // Si existe una instancia condatatable la eliminamos para poder reiniciarla
+        $('#tablaRendimientoXHa').dataTable().fnDestroy();
+        
         tablaRendimientoXHa = $('#tablaRendimientoXHa').DataTable({
             'iDisplayLength': 25,
             language: {

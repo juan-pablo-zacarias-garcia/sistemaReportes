@@ -1,5 +1,5 @@
-<br/>
-<br/>
+<br />
+<br />
 <h4>Ventas por Hectarea</h4>
 <hr>
 <table id="tablaVentasXHa" class="table table-bordered table-condensed table-striped col-md-8">
@@ -26,6 +26,9 @@
 var tablaVentasXHa;
 $(document).ready(
     function() {
+
+        // Si existe una instancia condatatable la eliminamos para poder reiniciarla
+        $('#tablaVentasXHa').dataTable().fnDestroy();
 
         tablaVentasXHa = $('#tablaVentasXHa').DataTable({
             'iDisplayLength': 25,
