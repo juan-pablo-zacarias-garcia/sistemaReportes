@@ -14,12 +14,12 @@
                     <div class="col-12 ">
                         <h3>Tablas disponibles</h3>
                         <hr>
-                        <label>Año: 
+                        <label>Año:
                             <select id="selectAnio" class="">
                                 @foreach ($anios as $anio)
                                 <option value="{{$anio->ANIO}}">{{$anio->ANIO}}</option>
                                 @endforeach
-                                <option value="0" >Todos</option>
+                                <option value="0">Todos</option>
                             </select></label>
                         <button id="btnCargarTablas" class="btn btn-danger">Cargar tablas</button>
                         <hr>
@@ -76,8 +76,7 @@
             </div>
         </div>
 
-    </div>
-    <script src="{{asset('assets/js/jquery.js')}}"></script>
+    </div>    
     <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('assets/js/dataTables.select.min.js')}}"></script>
     <script src="{{asset('assets/js/dataTables.keyTable.min.js')}}"></script>
@@ -91,51 +90,50 @@
                 $("#listaTablas").removeClass("hidden");
                 $("#pricipal").empty();
                 anio = $('#selectAnio').val();
-                console.log(anio);
                 cargarDatosTablas(anio);
             }
-        );
+        )
 
         function cargarDatosTablas(anio) {
             ////Cargamos la tabla selecionada
             activo = '1';
             //cargamos la tabla horizontal
             thl = $.ajax({
-                url: "/tablaHorizontal/"+anio,
+                url: "/tablaHorizontal/" + anio,
                 type: "GET",
             });
             //cargamos la tabla de costos por hectarea
             tcxh = $.ajax({
-                url: "/tablaCostoXHa/"+anio,
+                url: "/tablaCostoXHa/" + anio,
                 type: "GET",
             });
             //cargamos la tabla de ventas por hectarea
             tvxh = $.ajax({
-                url: "/tablaVentasXHa/"+anio,
+                url: "/tablaVentasXHa/" + anio,
                 type: "GET",
             });
             //cargamos la tabla de rendimiento por hectarea
             trxh = $.ajax({
-                url: "/tablaRendimientoXHa/"+anio,
+                url: "/tablaRendimientoXHa/" + anio,
                 type: "GET",
             });
             //cargamos la tabla de resultados por cultivo
             trxc = $.ajax({
-                url: "/tablaResultadosXCultivo/"+anio,
+                url: "/tablaResultadosXCultivo/" + anio,
                 type: "GET",
             });
             //cargamos la tabla de agroquímicos por hectarea
             taxh = $.ajax({
-                url: "/tablaAgroquimicosXHa/"+anio,
+                url: "/tablaAgroquimicosXHa/" + anio,
                 type: "GET",
             });
             tfxh = $.ajax({
-                url: "/tablaFertilizantesXHa/"+anio,
+                url: "/tablaFertilizantesXHa/" + anio,
                 type: "GET",
             });
 
             tpxh = $.ajax({
-                url: "/tablaPlantulaXHa/"+anio,
+                url: "/tablaPlantulaXHa/" + anio,
                 type: "GET",
             });
 

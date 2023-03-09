@@ -1,6 +1,6 @@
 <br />
 <br />
-<h4>Rendimiento por Hectarea</h4>
+<h4>Rendimiento por hectarea</h4>
 <hr>
 <table id="tablaRendimientoXHa" class="table table-bordered table-condensed table-striped col-md-8">
     <thead>

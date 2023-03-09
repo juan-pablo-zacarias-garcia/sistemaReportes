@@ -1,6 +1,6 @@
 <br />
 <br />
-<h4>Fertilizantes por Hectarea</h4>
+<h4>Fertilizantes por hectarea</h4>
 <hr>
 <table id="tablaFertilizantesXHa" class="table table-bordered table-condensed table-striped col-md-8">
     <thead>

@@ -1,6 +1,6 @@
 <br />
 <br />
-<h4>Costos por Hectarea</h4>
+<h4>Costos por hectarea</h4>
 <hr>
 <table id="tablaCostoXHa" class="table table-bordered table-condensed table-striped col-md-8">
     <thead>
@@ -18,8 +18,17 @@
         <tr>
             @foreach($fila as $dato)
             @if (is_numeric($dato))
-            <td><a
-                    href="/tablaDetalle/tablaCostoXHa/{{$anio.'/'.$fila->PRODUCTO.'/'.key($datos[0])}}">{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</a>
+            <td>
+                <form method="POST" action="{{ route('detallesTablas') }}">
+                    @csrf
+                    <input name="tabla" type="hidden" value="tablaCostoXHa" />
+                    <input name="anio" type="hidden" value="{{$anio}}" />
+                    <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
+                    <input name="rancho" type="hidden" value="{{key($datos[0])}}" />
+                    <input type="submit"
+                        value="{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}" />
+                    <!-- <a href="/tablaDetalle/tablaCostoXHa/{{$anio.'/'.$fila->PRODUCTO.'/'.key($datos[0])}}">{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</a> -->
+                </form>
             </td>
             @else
             <td>{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</td>

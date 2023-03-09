@@ -53,8 +53,11 @@ Route::get('/tablaFertilizantesXHa/{anio}',[usuariosComunController::class, 'tab
 Route::get('/tablaPlantulaXHa/{anio}',[usuariosComunController::class, 'tablaPlantulaXHa'])->middleware(['auth', 'verified'])->name('tablaPlantulaXHa');
 //retorna la tabla de detalles
 Route::get('/tablaDetalle/{tabla}/{anio}/{producto}/{rancho}',[usuariosComunController::class, 'tablaDetalle'])->middleware(['auth', 'verified'])->name('tablaDetalle');
+//retorna la tabla de detalles
+Route::post('/detallesTablas',[usuariosComunController::class, 'tablaDetalle'])->middleware(['auth', 'verified'])->name('detallesTablas');
 
-
+//retorna un documento
+Route::get('/documento',[usuariosComunController::class, 'documento'])->middleware(['auth', 'verified'])->name('documento');
 /////////////////////////////////////rutas de admin///////////////////////////////////////////
 
 //Retorna la vista de la tabla de usuarios

@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="{{asset('assets/js/jquery.js')}}"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap.css')}}" />
 </head>
