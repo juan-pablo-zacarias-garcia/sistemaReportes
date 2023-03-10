@@ -38,16 +38,8 @@
             <li><a href="{{route('tablas')}}">Tablas</a></li>
             <li><span>Documentos</span>
                 <ul>
-                    <li><span>RH</span>
-                        <ul>
-                            <li><a href="#">Documento1</a></li>
-                        </ul>
-                    </li>
-                    <li><span>Finanzas</span>
-                        <ul>
-                            <li><a href="#">Documento1</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="{{route('documentos')}}">RH</a></li>
+                    <li><span>Finanzas</span></li>
                 </ul>
             </li>
             <li><span>{{ Auth::user()->name }}</span>

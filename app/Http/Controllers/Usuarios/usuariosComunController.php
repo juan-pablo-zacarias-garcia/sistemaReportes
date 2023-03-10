@@ -9,13 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 class usuariosComunController extends Controller
 {
-    //////Documentos////////////
-    public function documento(){
-        $url = Storage::url('public/ejemplo.pdf');
-        return view('usuarios.documento',['urlPDF'=>$url]);
+    
+    ///////////////Devuelve la url de un documento, podemos agregar permisos////////////
+    public function getFile(Request $request, $path){
+        abort_if(
+            !Storage::disk('documentos') ->exists($path),
+            404,
+            "The file doesn't exist. Check the path."
+            );
+        $url = Storage::disk('documentos')->response($path);
+        return $url;
     }
 
     //////////////////////////////////Vistas////////////////////////////////
+    
+    //////Vista Documentos////////////
+    public function documentos(Request $request){
+        $listaArchivos=Storage::disk('documentos')->allFiles();
+        return view('usuarios.documento',['listaArchivos'=>$listaArchivos]);
+    }
+
+
     //Retorna la vista principal de tablas
     public function tablas(){
         if(auth()->user()->type==1){
