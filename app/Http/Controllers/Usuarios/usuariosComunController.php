@@ -5,34 +5,17 @@ namespace App\Http\Controllers\Usuarios;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class usuariosComunController extends Controller
 {
     
-    ///////////////Devuelve la url de un documento, podemos agregar permisos////////////
-    public function getFile(Request $request, $path){
-        abort_if(
-            !Storage::disk('documentos') ->exists($path),
-            404,
-            "The file doesn't exist. Check the path."
-            );
-        $url = Storage::disk('documentos')->response($path);
-        return $url;
-    }
+
 
     //////////////////////////////////Vistas////////////////////////////////
-    
-    //////Vista Documentos////////////
-    public function documentos(Request $request){
-        $listaArchivos=Storage::disk('documentos')->allFiles();
-        return view('usuarios.documento',['listaArchivos'=>$listaArchivos]);
-    }
-
 
     //Retorna la vista principal de tablas
     public function tablas(){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==2){
             $anios = DB::select("SELECT DISTINCT ANIO from tablas WHERE CODIGO!='0' ");
                   
             //mandamos los datos para formar la tabla de la tabla
@@ -45,7 +28,7 @@ class usuariosComunController extends Controller
 
     //Retorna la tabla horizontal
     public function tablaHorizontal(Request $request){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==2){
             //Si se envía el año = 0 entonces devuelve todos los años
             $anio = ($request->anio=="0")?"":"AND ANIO=".$request->anio;
 
@@ -59,7 +42,7 @@ class usuariosComunController extends Controller
             }
                       
             //mandamos los datos para formar la tabla de la tabla
-            return view('usuarios.recursos.tablas.horizontal',['datos'=>$datos, 'headers'=>$headers]); 
+            return view('usuarios.recursosTablas.horizontal',['datos'=>$datos, 'headers'=>$headers]); 
         }
         else{
             return view("home");
@@ -68,7 +51,7 @@ class usuariosComunController extends Controller
 
      //Retorna la tabla costoXHa
      public function tablaCostoXHa(Request $request){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==2){
             //consulta para obtener todos los ranchos que existen
             $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
             //Si se envía el año = 0 entonces devuelve todos los años
@@ -116,7 +99,7 @@ class usuariosComunController extends Controller
             }
             
             //mandamos los datos para formar la tabla de la tabla
-            return view('usuarios.recursos.tablas.costosxha',['datos'=>$datos, 'headers'=>$headers,'anio'=>$request->anio]); 
+            return view('usuarios.recursosTablas.costosxha',['datos'=>$datos, 'headers'=>$headers,'anio'=>$request->anio]); 
         }
         else{
             return view("home");
@@ -125,7 +108,7 @@ class usuariosComunController extends Controller
     
     //Retorna la tabla ventas x hectarea
     public function tablaVentasXHa(Request $request){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==2){
             //consulta para obtener todos los ranchos que existen
             $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
             //Si se envía el año = 0 entonces devuelve todos los años
@@ -169,7 +152,7 @@ class usuariosComunController extends Controller
                 next($datos[0]);
             }  
             //mandamos los datos para formar la tabla de la tabla
-            return view('usuarios.recursos.tablas.ventasxha',['datos'=>$datos, 'headers'=>$headers]); 
+            return view('usuarios.recursosTablas.ventasxha',['datos'=>$datos, 'headers'=>$headers]); 
         }
         else{
             return view("home");
@@ -178,7 +161,7 @@ class usuariosComunController extends Controller
 
         //Retorna la tabla rendimiento x hectarea
     public function tablaRendimientoXHa(Request $request){
-            if(auth()->user()->type==1){
+            if(auth()->user()->type==2){
                 //consulta para obtener todos los ranchos que existen
                 $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
                 //Si se envía el año = 0 entonces devuelve todos los años
@@ -222,7 +205,7 @@ class usuariosComunController extends Controller
                     next($datos[0]);
                 }  
                 //mandamos los datos para formar la tabla de la tabla
-                return view('usuarios.recursos.tablas.rendimientoxha',['datos'=>$datos, 'headers'=>$headers]); 
+                return view('usuarios.recursosTablas.rendimientoxha',['datos'=>$datos, 'headers'=>$headers]); 
             }
             else{
                 return view("home");
@@ -230,7 +213,7 @@ class usuariosComunController extends Controller
     }
 
    public function tablaResultadosXCultivo(Request $request){
-    if(auth()->user()->type==1){
+    if(auth()->user()->type==2){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -274,7 +257,7 @@ class usuariosComunController extends Controller
             next($datos[0]);
         }  
         //mandamos los datos para formar la tabla de la tabla
-        return view('usuarios.recursos.tablas.resultadosxcultivo',['datos'=>$datos, 'headers'=>$headers]); 
+        return view('usuarios.recursosTablas.resultadosxcultivo',['datos'=>$datos, 'headers'=>$headers]); 
     }
     else{
         return view("home");
@@ -282,7 +265,7 @@ class usuariosComunController extends Controller
    }
 
    public function tablaAgroquimicosXHa(Request $request){
-    if(auth()->user()->type==1){
+    if(auth()->user()->type==2){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -326,7 +309,7 @@ class usuariosComunController extends Controller
             next($datos[0]);
         }  
         //mandamos los datos para formar la tabla de la tabla
-        return view('usuarios.recursos.tablas.agroquimicosxha',['datos'=>$datos, 'headers'=>$headers]); 
+        return view('usuarios.recursosTablas.agroquimicosxha',['datos'=>$datos, 'headers'=>$headers]); 
     }
     else{
         return view("home");
@@ -335,7 +318,7 @@ class usuariosComunController extends Controller
     
 
    public function tablaFertilizantesXHa(Request $request){
-    if(auth()->user()->type==1){
+    if(auth()->user()->type==2){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -379,7 +362,7 @@ class usuariosComunController extends Controller
             next($datos[0]);
         }  
         //mandamos los datos para formar la tabla de la tabla
-        return view('usuarios.recursos.tablas.fertilizantesxha',['datos'=>$datos, 'headers'=>$headers]); 
+        return view('usuarios.recursosTablas.fertilizantesxha',['datos'=>$datos, 'headers'=>$headers]); 
     }
     else{
         return view("home");
@@ -388,7 +371,7 @@ class usuariosComunController extends Controller
     
 
    public function tablaPlantulaXHa(Request $request){
-    if(auth()->user()->type==1){
+    if(auth()->user()->type==2){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -432,7 +415,7 @@ class usuariosComunController extends Controller
             next($datos[0]);
         }  
         //mandamos los datos para formar la tabla de la tabla
-        return view('usuarios.recursos.tablas.plantulaxha',['datos'=>$datos, 'headers'=>$headers]); 
+        return view('usuarios.recursosTablas.plantulaxha',['datos'=>$datos, 'headers'=>$headers]); 
     }
     else{
         return view("home");
@@ -440,7 +423,7 @@ class usuariosComunController extends Controller
    }
 
    public function tablaDetalle(Request $request){
-    if(auth()->user()->type==1){
+    if(auth()->user()->type==2){
          //Si se envía el año = 0 entonces devuelve todos los años
         $anio = ($request->anio=="0")?"":"AND ANIO=".$request->anio;
         
@@ -461,7 +444,7 @@ class usuariosComunController extends Controller
             }
                       
             //mandamos los datos para formar la tabla de la tabla
-            return view('usuarios.recursos.tablas.detallesTablas.detallesTablas',['datos'=>$datos, 'headers'=>$headers, 'anio'=>$anio]); 
+            return view('usuarios.recursosTablas.detallesTablas.detallesTablas',['datos'=>$datos, 'headers'=>$headers, 'anio'=>$anio]); 
     }
     else{
         return view("home");

@@ -37,7 +37,7 @@ return [
         ],
         'documentos' => [
             'driver' => 'local',
-            'root' => storage_path('documentos'),
+            'root' => 'C:/Users/ELIZABETH/Downloads',
             'visibility' => 'private',
             'throw' => false,
         ],

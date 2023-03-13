@@ -38,18 +38,7 @@
         <ul>
         <li><a href="/"><img src="{{asset('assets/img/agricola_nieto.png')}}" class="rounded mx-auto d-block" width="50%" alt="AgricolaNieto"></a></li>
             <li><a href="{{route('viewUsuarios')}}">Usuarios</a></li>
-            <li><span>About us</span>
-                <ul>
-                    <li><a href="/about/history">History</a></li>
-                    <li><span>The team</span>
-                        <ul>
-                            <li><a href="/about/team/management">Management</a></li>
-                            <li><a href="/about/team/sales">Sales</a></li>
-                            <li><a href="/about/team/development">Development</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+            <li><a href="{{route('viewDepartamentos')}}">Departamentos</a></li>
             <li><span>{{ Auth::user()->name }}</span>
                 <ul>
                     <li><a href="{{route('profile.edit')}}">Mi cuenta</a></li>

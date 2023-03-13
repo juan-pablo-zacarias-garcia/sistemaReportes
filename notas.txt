@@ -4,6 +4,8 @@ https://datatables.net/extensions/select/
 JQuery
 JQuery-confirm
 mmenujs
+jquery ui
+
 DataTable{
     select,
     keys,

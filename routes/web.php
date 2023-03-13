@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\departmentsController;
+use App\Http\Controllers\Archivos\archivosController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\mainController;
@@ -53,13 +55,19 @@ Route::get('tablaPlantulaXHa/{anio}',[usuariosComunController::class, 'tablaPlan
 //retorna la tabla de detalles
 Route::post('detallesTablas',[usuariosComunController::class, 'tablaDetalle'])->middleware(['auth', 'verified'])->name('detallesTablas');
 
+//////////////////////////////////////Archivos///////////////
+
 //retorna la vista de documentos
-Route::get('documentos',[usuariosComunController::class, 'documentos'])->middleware(['auth', 'verified'])->name('documentos');
+Route::post('documentos',[archivosController::class, 'documentos'])->middleware(['auth', 'verified'])->name('documentos');
 
 //retorna un documento
-Route::get('getFile/{path}',[usuariosComunController::class, 'getFile'])->middleware(['auth', 'verified'])->name('getFile');
+Route::get('getFile/{path}',[archivosController::class, 'getFile'])->middleware(['auth', 'verified'])->name('getFile');
+
+
 /////////////////////////////////////rutas de admin///////////////////////////////////////////
 
+
+// Usuarios
 //Retorna la vista de la tabla de usuarios
 Route::get('viewUsuarios',[usuariosController::class, 'viewUsuarios'])->middleware(['auth', 'verified'])->name('viewUsuarios');
 //Insertar usuario
@@ -76,6 +84,26 @@ Route::get('FormEditUser/{id}',[usuariosController::class, 'FormEditUser'])->mid
 //Retorna la tabla de usuarios
 Route::get('tablaUsuarios',[usuariosController::class, 'tablaUsuarios'])->middleware(['auth', 'verified'])->name('tablaUsuarios');
 
+// Departamentos
+//Retorna la vista de la tabla de usuarios
+Route::get('viewDepartamentos',[departmentsController::class, 'viewDepartamentos'])->middleware(['auth', 'verified'])->name('viewDepartamentos');
+
+//Retorna la lista de departamentos con usuarios
+Route::get('listDepartments',[departmentsController::class, 'listDepartments'])->middleware(['auth', 'verified'])->name('listDepartments');
+//Formulario de registro de usuarios para llamarlo con jquery
+Route::get('FormNewDepartment',[departmentsController::class, 'FormNewDepartment'])->middleware(['auth', 'verified'])->name('FormNewDepartment');
+//Formulario de editar usuarios para llamarlo con jquery
+Route::get('FormEditDepartment/{id}',[departmentsController::class, 'FormEditDepartment'])->middleware(['auth', 'verified'])->name('FormEditDepartment');
+
+
+//Insertar departamento
+Route::post('registerDepartment', [usuariosController::class, 'registerDepartment'])->middleware(['auth', 'verified'])->name('registerDepartment');
+//Actualizar departamento
+Route::post('updateDepartment', [usuariosController::class, 'updateDepartment'])->middleware(['auth', 'verified'])->name('updateDepartment');
+//Eliminar departamento
+Route::get('deleteDepartment/{id}', [usuariosController::class, 'deleteDepartment'])->middleware(['auth', 'verified']);
+
+//////////////////fin admin/////////////////
 
 //Rutas de la API
 //Usuarios comunes

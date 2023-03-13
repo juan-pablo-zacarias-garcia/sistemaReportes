@@ -17,14 +17,27 @@
          <input id="password" name="password" type="password" class="form-control" id="exampleInputPassword1"
              placeholder="Password">
      </div>
-     <div class="form-group">
-         <label>Rol</label>
-         <br />
-         <label><input name="type" value='1' type="radio" {{$user->value("type")==1?'checked':''}}>Usuario</label>
-         <br />
-         <label><input name="type" value='0' type="radio"
-                 {{$user->value("type")==0?'checked':''}}>Administrador</label>
+    
+     <div class="form-group mt-4">
+         <label for="exampleInputEmail1">Departamento</label>
+         <select id="department" class="block mt-1 w-full" name="department">
+            @foreach ($departments as $department)
+            <option value="{{$department->id}}" {{$department->id==$user->value("department")? 'selected':''}} >{{$department->name}}</option>
+            @endforeach
+        </select>
      </div>
+
+     <div class="form-group mt-4">
+         <label for="exampleInputEmail1">Tipo de usuario</label>
+         <select id="type" class="block mt-1 w-full" name="type">
+            @foreach ($users_type as $type)
+            <option value="{{$type->id}}"  {{$type->id==$user->value("type")? 'selected':''}}>{{$type->type}}</option>
+            @endforeach
+        </select>
+     </div>
+
+
+     
      <div class="flex items-center justify-end mt-4">
          <button id="editUserForm"
              class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Actualizar</button>
@@ -40,7 +53,7 @@ $(document).ready(
             buttons: {
                 confirm: function() {
 
-                    //Ajax para eliminar el usuario
+                    //Ajax para actualizar datos de usuario
                     $.ajax({
                         url: "/updateUser",
                         type: 'POST',

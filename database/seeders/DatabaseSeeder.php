@@ -24,12 +24,22 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        //inserta al departamento de sistemas
+        DB::table('departments')->insert([
+            'name' => 'TI'
+        ]);
+        //inserta los tipos de usuarios
+        DB::table('users_type')->insert(['type' => 'Administrador']);
+        DB::table('users_type')->insert(['type' => 'Usuario']);
+
         //inserta al usuario administrador a la base de datos
         DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'practicante2@agnieto.com',
+            'department'=> 1,
             'password' => Hash::make('1380JpLm'),
-            'type' => 0
+            'type' => 1
         ]);
+
     }
 }

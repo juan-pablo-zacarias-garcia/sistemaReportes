@@ -1,10 +1,11 @@
-@if (Auth::user()->type==0)
+@if (Auth::user()->type==1)
 <table id="usuarios" class="table table-bordered table-condensed table-striped col-md-12">
     <thead>
         <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Correo</th>
+            <th>Departamento</th>
             <th>Fecha de registro</th>
             <th>Rol</th>
         </tr>
@@ -54,6 +55,10 @@ $(document).ready(function() {
             {
                 data: 'email',
                 name: 'Correo'
+            },
+            {
+                data: 'department',
+                name: 'Departamento'
             },
             {
                 data: 'created_at',

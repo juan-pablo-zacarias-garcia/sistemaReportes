@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 use Illuminate\Validation\Rules\Password;
@@ -15,7 +16,7 @@ class usuariosController extends Controller
     //////////////////////////////////servicios web////////////////////////////////
     //Devuelve los usuarios registrados menos el usuario autenticado en la sesion
     public function viewUsuarios(){
-        if(auth()->user()->type==0){
+        if(auth()->user()->type==1){
             $idUserAuth = auth()->user()->id;
             $users = DataTables::of(User::where('id','!=',$idUserAuth))->results();
             return view('admin.Usuarios',['users'=>$users]);
@@ -29,17 +30,20 @@ class usuariosController extends Controller
 
     //////////////////////////////////Formularios////////////////////////////////
     public function FormNewUser(){
-        if(auth()->user()->type==0){
-            return view('admin.recursos.formNewUser');
+        if(auth()->user()->type==1){
+            $departments=DB::select("select * from departments");
+            return view('admin.recursosUsuarios.formNewUser', ['departments'=>$departments]);
         }
         else{
             return view("home");
         }
     }
     public function FormEditUser($idUser){
-        if(auth()->user()->type==0){
+        if(auth()->user()->type==1){
             $user = User::where('id','=',$idUser);
-            return view('admin.recursos.formEditUser',['user'=>$user]); 
+            $departments=DB::select("select * from departments");
+            $user_types = DB::select("select * from users_type");
+            return view('admin.recursosUsuarios.formEditUser',['user'=>$user,'departments'=>$departments, 'users_type'=>$user_types ]); 
         }
         else{
             return view("home");
@@ -48,8 +52,8 @@ class usuariosController extends Controller
 
     //////////////////////////////////Vistas////////////////////////////////
     public function tablaUsuarios(){
-        if(auth()->user()->type==0){
-            return view('admin.recursos.tablaUsuarios');
+        if(auth()->user()->type==1){
+            return view('admin.recursosUsuarios.tablaUsuarios');
         }
         else{
             return view("home");
@@ -61,7 +65,7 @@ class usuariosController extends Controller
     //Registra un nuevo usuario en la base de datos
     public function registerUser(Request $request)
     {
-        if(auth()->user()->type==0){
+        if(auth()->user()->type==1){
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
@@ -71,6 +75,7 @@ class usuariosController extends Controller
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'department' => $request->department,
                 'password' => Hash::make($request->password),
             ]);
     
@@ -85,7 +90,7 @@ class usuariosController extends Controller
     //Edita usuario en la base de datos
     public function updateUser(Request $request)
     {
-        if(auth()->user()->type==0){
+        if(auth()->user()->type==1){
             $user = User::find($request->id);
             if(isset($request->name)){
                 $user->name = $request->name;
@@ -98,6 +103,9 @@ class usuariosController extends Controller
             }
             if(isset($request->type)){
                 $user->type = $request->type;
+            }
+            if(isset($request->department)){
+                $user->department = $request->department;
             }
             
             $user->save();
@@ -114,7 +122,7 @@ class usuariosController extends Controller
 
     //Elimina un usuario
     public function deleteUser($idUser){
-        if(auth()->user()->type==0){
+        if(auth()->user()->type==1){
             $deletedUser=User::where('id',"=", $idUser)->delete();
             if($deletedUser){
                 return true;

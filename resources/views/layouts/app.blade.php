@@ -23,11 +23,11 @@
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         <!-- Barra de navegación para cada tipo de usuario-->
         @switch(Auth::user()->type)
-        @case(0)
+        @case(1)
             @include('admin.recursos.navbar_admin')
             @include('admin.recursos.menu_lateral')
         @break
-        @case(1)
+        @case(2)
             @include('usuarios.recursos.navbar_user')
             @include('usuarios.recursos.menu_lateral')
         @break

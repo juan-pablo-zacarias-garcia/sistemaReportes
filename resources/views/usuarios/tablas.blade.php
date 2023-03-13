@@ -1,5 +1,5 @@
 <x-app-layout>
-    @if (Auth::user()->type==1)
+    @if (Auth::user()->type==2)
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/select.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/keyTable.dataTables.min.css')}}" />

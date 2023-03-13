@@ -1,5 +1,4 @@
-
-@if (Auth::user()->type==0)
+@if (Auth::user()->type==1)
 <form method="POST" action="{{ route('registerUser') }}" class="mt-6 space-y-6">
     @csrf
     <!-- Name -->
@@ -17,6 +16,18 @@
             autocomplete="username" />
         <x-input-error :messages="$errors->get('email')" class="mt-2" />
     </div>
+
+    <!-- Department -->
+    <div class="mt-4">
+        <x-input-label for="department" :value="__('Departamento')" />
+        <select id="department" class="block mt-1 w-full" name="department">
+            @foreach ($departments as $department)
+            <option value="{{$department->id}}" >{{$department->name}}</option>
+            @endforeach
+        </select>
+    </div>
+
+    
 
     <!-- Password -->
     <div class="mt-4">

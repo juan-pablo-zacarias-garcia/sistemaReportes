@@ -38,8 +38,19 @@
             <li><a href="{{route('tablas')}}">Tablas</a></li>
             <li><span>Documentos</span>
                 <ul>
-                    <li><a href="{{route('documentos')}}">RH</a></li>
-                    <li><span>Finanzas</span></li>
+                    @php
+                    $departments = DB::select("select name from departments where id=".Auth::user()->department);
+                    @endphp
+                    @foreach( $departments as $department)
+                    <li><a>
+                            <form method="POST" action="{{route('documentos',['department'=>$department->name])}}">
+                                @csrf
+                                <input class="w-100" name="{{$department->name}}" type="submit"
+                                    value="{{$department->name}}">
+                            </form>
+                        </a>
+                    </li>
+                    @endforeach
                 </ul>
             </li>
             <li><span>{{ Auth::user()->name }}</span>

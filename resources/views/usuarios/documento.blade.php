@@ -3,7 +3,7 @@
     <table id="tablaArchivos" class="table table-bordered table-condensed table-striped col-md-8">
         <thead>
             <tr>
-                <th>Archivos disponibles</th>
+                <th>Archivos disponibles de {{$department}}</th>
             </tr>
         </thead>
         <tbody>
