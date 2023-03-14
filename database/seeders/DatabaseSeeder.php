@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 
         //inserta al departamento de sistemas
         DB::table('departments')->insert([
-            'name' => 'TI'
+            'name' => 'Sin departamento'
         ]);
         //inserta los tipos de usuarios
         DB::table('users_type')->insert(['type' => 'Administrador']);

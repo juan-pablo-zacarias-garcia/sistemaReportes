@@ -39,6 +39,7 @@
         <li><a href="/"><img src="{{asset('assets/img/agricola_nieto.png')}}" class="rounded mx-auto d-block" width="50%" alt="AgricolaNieto"></a></li>
             <li><a href="{{route('viewUsuarios')}}">Usuarios</a></li>
             <li><a href="{{route('viewDepartamentos')}}">Departamentos</a></li>
+            <li><a href="{{route('viewDocuments')}}">Documentos</a></li>
             <li><span>{{ Auth::user()->name }}</span>
                 <ul>
                     <li><a href="{{route('profile.edit')}}">Mi cuenta</a></li>

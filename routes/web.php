@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\departmentsController;
+use App\Http\Controllers\Admin\documentsController;
 use App\Http\Controllers\Archivos\archivosController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -61,7 +62,7 @@ Route::post('detallesTablas',[usuariosComunController::class, 'tablaDetalle'])->
 Route::post('documentos',[archivosController::class, 'documentos'])->middleware(['auth', 'verified'])->name('documentos');
 
 //retorna un documento
-Route::get('getFile/{path}',[archivosController::class, 'getFile'])->middleware(['auth', 'verified'])->name('getFile');
+Route::get('getFile/{department}/{file}',[archivosController::class, 'getFile'])->middleware(['auth', 'verified'])->name('getFile');
 
 
 /////////////////////////////////////rutas de admin///////////////////////////////////////////
@@ -85,7 +86,7 @@ Route::get('FormEditUser/{id}',[usuariosController::class, 'FormEditUser'])->mid
 Route::get('tablaUsuarios',[usuariosController::class, 'tablaUsuarios'])->middleware(['auth', 'verified'])->name('tablaUsuarios');
 
 // Departamentos
-//Retorna la vista de la tabla de usuarios
+//Retorna la vista primcipal de departamentos
 Route::get('viewDepartamentos',[departmentsController::class, 'viewDepartamentos'])->middleware(['auth', 'verified'])->name('viewDepartamentos');
 
 //Retorna la lista de departamentos con usuarios
@@ -97,12 +98,20 @@ Route::get('FormEditDepartment/{id}',[departmentsController::class, 'FormEditDep
 
 
 //Insertar departamento
-Route::post('registerDepartment', [usuariosController::class, 'registerDepartment'])->middleware(['auth', 'verified'])->name('registerDepartment');
+Route::post('registerDepartment', [departmentsController::class, 'registerDepartment'])->middleware(['auth', 'verified'])->name('registerDepartment');
 //Actualizar departamento
-Route::post('updateDepartment', [usuariosController::class, 'updateDepartment'])->middleware(['auth', 'verified'])->name('updateDepartment');
+Route::post('updateDepartment', [departmentsController::class, 'updateDepartment'])->middleware(['auth', 'verified'])->name('updateDepartment');
 //Eliminar departamento
-Route::get('deleteDepartment/{id}', [usuariosController::class, 'deleteDepartment'])->middleware(['auth', 'verified']);
+Route::get('deleteDepartment/{id}', [departmentsController::class, 'deleteDepartment'])->middleware(['auth', 'verified']);
 
+
+///Documentos
+//Retorna la vista principal de documents
+Route::get('viewDocuments',[documentsController::class, 'viewDocuments'])->middleware(['auth', 'verified'])->name('viewDocuments');
+//Retorna la lista de directorios y documentos
+Route::get('listDocuments',[documentsController::class, 'listDocuments'])->middleware(['auth', 'verified'])->name('listDocuments');
+//Carga un documento al servidor
+Route::post('uploadFile', [archivosController::class, 'uploadFile'])->middleware(['auth', 'verified'])->name('uploadFile');
 //////////////////fin admin/////////////////
 
 //Rutas de la API

@@ -19,11 +19,11 @@
 <script src="{{asset('assets/js/jquery-confirm.min.js')}}"></script>
 <script type="text/javascript">
 
-function vistaRapida(nomDoc){
+function vistaRapida(path){
     $.confirm({
         title: '',
         content: function() {
-            return "<iframe width='100%' height='1000' src='/getFile/"+nomDoc+"' ></iframe>";
+            return "<iframe width='100%' height='1000' src='/getFile/"+path+"' ></iframe>";
         },
         useBootstrap: false,
         boxWidth: '100%',

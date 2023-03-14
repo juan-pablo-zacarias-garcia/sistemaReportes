@@ -1,5 +1,5 @@
 <x-app-layout class="col-md-9">
-    @if (Auth::user()->type==1)
+    @if (Auth::user()->type==env('USER_ADMIN'))
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/jquery-confirm.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/jquery-ui.css')}}" />
@@ -22,7 +22,7 @@
                 <input id="idDepartment" type="hidden" value="">
                 <hr>
                 <div id="accordion">
-
+                    
                 </div>
             </div>
 
@@ -36,28 +36,29 @@
     <script src="{{asset('assets/js/dataTables.select.min.js')}}"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-        cargarAcordeon();
+        $("#accordion").accordion({
+            collapsible: true
+        });
+        refreshAcordeon();
         $("#addDepartment").confirm({
             title: 'Nuevo departamento',
             content: 'url:{{route("FormNewDepartment")}}',
             columnClass: 'medium',
             buttons: {
-                cancel: function() {}
+                Cerrar: function() {}
             }
         });
     });
 
     //Recarga los datos de la lista de departamentos con sus usuarios
-    function cargarAcordeon() {
+    function refreshAcordeon() {
         $.ajax({
             url: "listDepartments",
             type: "GET"
         }).done(function(data) {
             $("#accordion").empty();
             $("#accordion").append(data);
-            $("#accordion").accordion({
-                collapsible: true
-            });
+            $("#accordion").accordion("refresh");
         });
     }
     </script>

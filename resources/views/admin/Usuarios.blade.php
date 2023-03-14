@@ -1,5 +1,5 @@
 <x-app-layout class="col-md-9">
-    @if (Auth::user()->type==1)
+    @if (Auth::user()->type==env('USER_ADMIN'))
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/jquery-confirm.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/select.dataTables.min.css')}}" />

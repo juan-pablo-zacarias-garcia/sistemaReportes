@@ -15,7 +15,7 @@ class usuariosComunController extends Controller
 
     //Retorna la vista principal de tablas
     public function tablas(){
-        if(auth()->user()->type==2){
+        if(auth()->user()->type==env('USER_COMUN')){
             $anios = DB::select("SELECT DISTINCT ANIO from tablas WHERE CODIGO!='0' ");
                   
             //mandamos los datos para formar la tabla de la tabla
@@ -28,7 +28,7 @@ class usuariosComunController extends Controller
 
     //Retorna la tabla horizontal
     public function tablaHorizontal(Request $request){
-        if(auth()->user()->type==2){
+        if(auth()->user()->type==env('USER_COMUN')){
             //Si se envía el año = 0 entonces devuelve todos los años
             $anio = ($request->anio=="0")?"":"AND ANIO=".$request->anio;
 
@@ -51,7 +51,7 @@ class usuariosComunController extends Controller
 
      //Retorna la tabla costoXHa
      public function tablaCostoXHa(Request $request){
-        if(auth()->user()->type==2){
+        if(auth()->user()->type==env('USER_COMUN')){
             //consulta para obtener todos los ranchos que existen
             $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
             //Si se envía el año = 0 entonces devuelve todos los años
@@ -108,7 +108,7 @@ class usuariosComunController extends Controller
     
     //Retorna la tabla ventas x hectarea
     public function tablaVentasXHa(Request $request){
-        if(auth()->user()->type==2){
+        if(auth()->user()->type==env('USER_COMUN')){
             //consulta para obtener todos los ranchos que existen
             $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
             //Si se envía el año = 0 entonces devuelve todos los años
@@ -161,7 +161,7 @@ class usuariosComunController extends Controller
 
         //Retorna la tabla rendimiento x hectarea
     public function tablaRendimientoXHa(Request $request){
-            if(auth()->user()->type==2){
+            if(auth()->user()->type==env('USER_COMUN')){
                 //consulta para obtener todos los ranchos que existen
                 $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
                 //Si se envía el año = 0 entonces devuelve todos los años
@@ -213,7 +213,7 @@ class usuariosComunController extends Controller
     }
 
    public function tablaResultadosXCultivo(Request $request){
-    if(auth()->user()->type==2){
+    if(auth()->user()->type==env('USER_COMUN')){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -265,7 +265,7 @@ class usuariosComunController extends Controller
    }
 
    public function tablaAgroquimicosXHa(Request $request){
-    if(auth()->user()->type==2){
+    if(auth()->user()->type==env('USER_COMUN')){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -318,7 +318,7 @@ class usuariosComunController extends Controller
     
 
    public function tablaFertilizantesXHa(Request $request){
-    if(auth()->user()->type==2){
+    if(auth()->user()->type==env('USER_COMUN')){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -371,7 +371,7 @@ class usuariosComunController extends Controller
     
 
    public function tablaPlantulaXHa(Request $request){
-    if(auth()->user()->type==2){
+    if(auth()->user()->type==env('USER_COMUN')){
         //consulta para obtener todos los ranchos que existen
         $queryRanchos=DB::select("Select DISTINCT RANCHO as RANCHOS from tablas where RANCHO!='0' order by RANCHO ASC;");
         //Si se envía el año = 0 entonces devuelve todos los años
@@ -423,7 +423,7 @@ class usuariosComunController extends Controller
    }
 
    public function tablaDetalle(Request $request){
-    if(auth()->user()->type==2){
+    if(auth()->user()->type==env('USER_COMUN')){
          //Si se envía el año = 0 entonces devuelve todos los años
         $anio = ($request->anio=="0")?"":"AND ANIO=".$request->anio;
         

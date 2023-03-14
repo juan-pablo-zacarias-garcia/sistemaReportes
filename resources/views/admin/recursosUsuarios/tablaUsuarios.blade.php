@@ -1,4 +1,4 @@
-@if (Auth::user()->type==1)
+@if (Auth::user()->type==env('USER_ADMIN'))
 <table id="usuarios" class="table table-bordered table-condensed table-striped col-md-12">
     <thead>
         <tr>

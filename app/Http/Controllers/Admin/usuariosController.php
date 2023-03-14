@@ -16,7 +16,7 @@ class usuariosController extends Controller
     //////////////////////////////////servicios web////////////////////////////////
     //Devuelve los usuarios registrados menos el usuario autenticado en la sesion
     public function viewUsuarios(){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             $idUserAuth = auth()->user()->id;
             $users = DataTables::of(User::where('id','!=',$idUserAuth))->results();
             return view('admin.Usuarios',['users'=>$users]);
@@ -30,7 +30,7 @@ class usuariosController extends Controller
 
     //////////////////////////////////Formularios////////////////////////////////
     public function FormNewUser(){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             $departments=DB::select("select * from departments");
             return view('admin.recursosUsuarios.formNewUser', ['departments'=>$departments]);
         }
@@ -39,7 +39,7 @@ class usuariosController extends Controller
         }
     }
     public function FormEditUser($idUser){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             $user = User::where('id','=',$idUser);
             $departments=DB::select("select * from departments");
             $user_types = DB::select("select * from users_type");
@@ -52,7 +52,7 @@ class usuariosController extends Controller
 
     //////////////////////////////////Vistas////////////////////////////////
     public function tablaUsuarios(){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             return view('admin.recursosUsuarios.tablaUsuarios');
         }
         else{
@@ -65,7 +65,7 @@ class usuariosController extends Controller
     //Registra un nuevo usuario en la base de datos
     public function registerUser(Request $request)
     {
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
@@ -90,7 +90,7 @@ class usuariosController extends Controller
     //Edita usuario en la base de datos
     public function updateUser(Request $request)
     {
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             $user = User::find($request->id);
             if(isset($request->name)){
                 $user->name = $request->name;
@@ -122,7 +122,7 @@ class usuariosController extends Controller
 
     //Elimina un usuario
     public function deleteUser($idUser){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             $deletedUser=User::where('id',"=", $idUser)->delete();
             if($deletedUser){
                 return true;

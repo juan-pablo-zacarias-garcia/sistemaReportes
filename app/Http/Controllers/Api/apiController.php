@@ -14,7 +14,7 @@ class apiController extends Controller
 
     //Retorna un JSON con los datos de la bd en la propiedad data
     public function getTablasJSON(){
-        if(auth()->user()->type==2){
+        if(auth()->user()->type==env('USER_COMUN')){
             $jsonString= datatables()->query(DB::table('tablas')->where('CODIGO','!=', '0'))->toJson();
             return $jsonString;
         }else{
@@ -24,7 +24,7 @@ class apiController extends Controller
     }
     //retorna un JSON con los usuarios de la bd para el admin
     public function getUsersJSON(){
-        if(auth()->user()->type==1){
+        if(auth()->user()->type==env('USER_ADMIN')){
             $id = Auth::user()->id;
             $jsonString= DataTables::of(User::where("id","!=",$id))->toJson();
             return $jsonString;

@@ -1,4 +1,4 @@
-@if (Auth::user()->type==1)
+@if (Auth::user()->type==env('USER_ADMIN'))
 <form method="POST" action="{{ route('registerUser') }}" class="mt-6 space-y-6">
     @csrf
     <!-- Name -->

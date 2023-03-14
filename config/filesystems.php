@@ -37,7 +37,7 @@ return [
         ],
         'documentos' => [
             'driver' => 'local',
-            'root' => 'C:/Users/ELIZABETH/Downloads',
+            'root' => 'C:/Users/ELIZABETH/Documents/Laravel/Archivos',
             'visibility' => 'private',
             'throw' => false,
         ],
