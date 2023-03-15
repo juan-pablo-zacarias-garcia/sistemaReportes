@@ -81,8 +81,11 @@ class departmentsController extends Controller
             if(isset($request->name)){
                 $depa->name = $request->name;
             }
+            if(isset($request->status)){
+                $depa->status = $request->status;
+            }
             $depa->save();
-            return $request;
+            return "Datos actualizados";
 
         }
         else{

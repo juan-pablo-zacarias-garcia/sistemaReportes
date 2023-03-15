@@ -11,11 +11,29 @@
                 <h3>Documentos</h3>
                 <hr>
                 <div>
-                    <form method="POST" id="formNewDocument" enctype="multipart/form-data">
-                        <input type="file" name="fileToUpload" id="fileToUpload">
-                        <button id="btnUpload"
-                            class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
-                            Subir archivo</button>
+                    <form action="{{ route('uploadFile') }}" method="POST" id="file-upload"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label>Departamento
+                                <select id="department" class="block mt-1 w-full" name="department">
+                                    @php
+                                    $dirs = Storage::disk('documentos')->directories();
+                                    @endphp
+                                    @foreach ($dirs as $dir)
+                                    <option value="{{$dir}}">{{$dir}}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </div>
+                        <div class="mb-3">
+                            <input type="file"accept="application/pdf" name="file" id="inputFile" class="form-control">
+                            <span class="text-danger" id="file-input-error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-success">Subir archivo</button>
+                        </div>
+
                     </form>
                 </div>
                 <button id="delDocument" hidden="true" class="btn btn-danger">
@@ -39,45 +57,54 @@
     $(document).ready(function() {
         refreshAcordeon();
 
-        //Carga el archivo al servidor
-        $("#btnUpload").confirm({
-            title: 'Nuevo archivo',
-            content: "Se agregará un nuevo archivo",
-            buttons: {
-                confirm: function() {
-                    var formData = new FormData(document.getElementById("formNewDocument"));
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    //Ajax para agregar nuevo departamento
-                    $.ajax({
-                        url: "uploadFile",
-                        type: "post",
-                        success: function(data) {
-                            window.alert(data);
-                        }
-                    });
-                    //fin de ajax
-
-                },
-                Cerrar: function() {}
+        //Se configura ajax para que mande el token csrf
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        //cuando se envíe el formulario
+        $('#file-upload').submit(function(e) {
+            e.preventDefault();
+            //se crea un nuevo objeto FormData de JS y se le agrega el formulario (this)
+            let formData = new FormData(this);
+            //se agrega al formData el departamento al que se cargará el archivo
+            formData.append('department', $('#department').val());
+            
+            $('#file-input-error').text('');
+            //Se realiza la petición ajax para cargar el archivo
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('uploadFile') }}",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: (response) => {
+                    if (response) {
+                        this.reset();
+                        
+                    }
+                    refreshAcordeon();
+                },
+                error: function(response) {
+                    console.log(response.responseJSON.message);
+                    $('#file-input-error').text("Error al cargar el archivo");
+                }
+            });
 
-    });
-
-    //Recarga los datos de la lista de departamentos con sus usuarios
-    function refreshAcordeon() {
-        $.ajax({
-            url: "listDocuments",
-            type: "GET"
-        }).done(function(data) {
-            $("#divAccordion").empty();
-            $("#divAccordion").append(data);
         });
-    }
+
+        //Recarga los datos de la lista de departamentos con sus usuarios
+        function refreshAcordeon() {
+            $.ajax({
+                url: "listDocuments",
+                type: "GET"
+            }).done(function(data) {
+                $("#divAccordion").empty();
+                $("#divAccordion").append(data);
+            });
+        }
+    });
     </script>
     @else
     <h1>Acceso denegado, su intento ha sido registrado</h1>

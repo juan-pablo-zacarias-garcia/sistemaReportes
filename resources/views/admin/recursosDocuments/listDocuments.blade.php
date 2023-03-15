@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="{{asset('assets/css/jquery-confirm.min.css')}}" />
 <div id="accordion">
     @foreach( $directories as $directory)
-    <h3>{{$directory}}</h3>
+    
     @php
     //Devuelve solo los archivos de la carpeta del departamento
     $Archivos=Storage::disk('documentos',)->allFiles($directory);
@@ -10,6 +10,7 @@
     return substr($v, -4)==".pdf";
     }, ARRAY_FILTER_USE_BOTH);
     @endphp
+    <h3>{{$directory}} ({{count($Archivos)}})</h3>
     <div><span>Archivos:</span>
         <ul>
             @foreach($Archivos as $Archivo)

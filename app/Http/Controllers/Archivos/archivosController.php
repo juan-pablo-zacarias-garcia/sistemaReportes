@@ -56,6 +56,11 @@ class archivosController extends Controller
 
         ///////función para cargar archivos
         public function uploadFile(Request $request){
-            return 'PASO';
+
+            //$fileName = $request->file.'.'.$request->file->extension();
+            $fileName = $request->file->getClientOriginalName();
+            $path = Storage::disk('documentos')->putFileAs($request->department, $request->file, $fileName);
+
+            return $path;
         }
 }

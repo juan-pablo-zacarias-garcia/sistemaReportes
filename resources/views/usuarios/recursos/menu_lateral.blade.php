@@ -39,9 +39,10 @@
             <li><span>Documentos</span>
                 <ul>
                     @php
-                    $departments = DB::select("select name from departments where id=".Auth::user()->department);
+                    $departments = DB::select("select * from departments where id=".Auth::user()->department);
                     @endphp
                     @foreach( $departments as $department)
+                    @if($department->status==1)
                     <li><a>
                             <form method="POST" action="{{route('documentos',['department'=>$department->name])}}">
                                 @csrf
@@ -50,6 +51,9 @@
                             </form>
                         </a>
                     </li>
+                    @else
+                    <li><a>Departamento cerrado</a></li>
+                    @endif
                     @endforeach
                 </ul>
             </li>

@@ -21,8 +21,8 @@
                 </button>
                 <input id="idDepartment" type="hidden" value="">
                 <hr>
-                <div id="accordion">
-                    
+                <div id="divAccordion">
+
                 </div>
             </div>
 
@@ -36,9 +36,6 @@
     <script src="{{asset('assets/js/dataTables.select.min.js')}}"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-        $("#accordion").accordion({
-            collapsible: true
-        });
         refreshAcordeon();
         $("#addDepartment").confirm({
             title: 'Nuevo departamento',
@@ -48,17 +45,16 @@
                 Cerrar: function() {}
             }
         });
-    });
 
+    });
     //Recarga los datos de la lista de departamentos con sus usuarios
     function refreshAcordeon() {
         $.ajax({
             url: "listDepartments",
             type: "GET"
         }).done(function(data) {
-            $("#accordion").empty();
-            $("#accordion").append(data);
-            $("#accordion").accordion("refresh");
+            $("#divAccordion").empty();
+            $("#divAccordion").append(data);
         });
     }
     </script>
