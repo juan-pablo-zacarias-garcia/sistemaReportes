@@ -1,4 +1,5 @@
 <x-app-layout class="col-md-9">
+
     @if (Auth::user()->type==env('USER_ADMIN'))
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/jquery-confirm.min.css')}}" />
@@ -20,8 +21,8 @@
                 </button>
                 <input id="idUser" type="hidden" value="">
                 <input id="emailUser" type="hidden" value="">
-
                 <hr>
+
                 <div id="tablaUsuarios">
 
                 </div>
@@ -58,7 +59,7 @@
                 return 'url:' + url;
             },
             buttons: {
-                Cerrar: function() {} 
+                Cerrar: function() {}
             }
         });
 
@@ -73,22 +74,23 @@
             },
             buttons: {
                 confirm: function() {
-                    id=document.getElementById("idUser").value;
-                    email=document.getElementById('emailUser').value;
+                    id = document.getElementById("idUser").value;
+                    email = document.getElementById('emailUser').value;
                     //Ajax para eliminar el usuario
                     $.ajax({
                         url: "/deleteUser/" + id,
                         type: 'get',
                         success: function(data) {
                             if (data.result != 'true') {
-                                $.alert('El usuario ' + email +" ha sido eliminado");
-                            }else{
-                                $.alert("Ha ocurrido un error al eliminar el usuario "+email);
+                                $.alert('El usuario ' + email + " ha sido eliminado");
+                            } else {
+                                $.alert("Ha ocurrido un error al eliminar el usuario " +
+                                    email);
                             }
                         }
                     });
                     //fin de ajax
-                    
+
                     //cargamos la tabla de los usuarios
                     $("#tablaUsuarios").load('/tablaUsuarios');
                     //Reinicimos los botones 

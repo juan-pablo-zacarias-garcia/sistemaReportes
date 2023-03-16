@@ -112,6 +112,10 @@ Route::get('viewDocuments',[documentsController::class, 'viewDocuments'])->middl
 Route::get('listDocuments',[documentsController::class, 'listDocuments'])->middleware(['auth', 'verified'])->name('listDocuments');
 //Carga un documento al servidor
 Route::post('uploadFile', [archivosController::class, 'uploadFile'])->middleware(['auth', 'verified'])->name('uploadFile');
+//elimina un documento
+Route::get('deleteFile/{department}/{file}',[archivosController::class, 'deleteFile'])->middleware(['auth', 'verified'])->name('deleteFile');
+
+
 //////////////////fin admin/////////////////
 
 //Rutas de la API

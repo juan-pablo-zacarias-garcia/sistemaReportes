@@ -11,13 +11,17 @@
     $users = DB::select("select * from users where department=".$department->id);
     @endphp
     <div>
-        <button id="btnEditDept" class="btn btn-outline-primary"><img
+        <button onclick="editDepto({{$department->id}})" class="btn btn-outline-primary"><img
                 src="{{asset('assets/icon/edit.png')}}" /></button>
         <hr>
-        <span>Usuarios:</span>
+        <span>Status: {{($department->status==0?'Deshabilitado':'Habilitado')}}</span>
+        <hr>
+        <div class="col-auto text-center"><h4>Usuarios:</h4></div>
+        <hr>
         <ul>
             @foreach($users as $user)
             <li>{{$user->name}}</li>
+            <hr>
             @endforeach
         </ul>
     </div>
@@ -30,4 +34,19 @@ $(document).ready(function() {
         collapsible: true
     });
 });
+
+function editDepto(id) {
+    //Editar departamento
+    $.confirm({
+        title: 'Editar departamento',
+        content: function() {
+            //carga el formulario para editar el usaurio
+            url = "/FormEditDepartment/" + id;
+            return 'url:' + url;
+        },
+        buttons: {
+            Cerrar: function() {}
+        }
+    });
+}
 </script>

@@ -1,7 +1,8 @@
 <link rel="stylesheet" href="{{asset('assets/css/jquery-confirm.min.css')}}" />
+<h4>Carpetas de departamentos</h4>
 <div id="accordion">
     @foreach( $directories as $directory)
-    
+
     @php
     //Devuelve solo los archivos de la carpeta del departamento
     $Archivos=Storage::disk('documentos',)->allFiles($directory);
@@ -11,10 +12,19 @@
     }, ARRAY_FILTER_USE_BOTH);
     @endphp
     <h3>{{$directory}} ({{count($Archivos)}})</h3>
-    <div><span>Archivos:</span>
+    <div>
+        <div class="col-auto text-center">
+            <h4>Archivos:</h4>
+        </div>
         <ul>
+            <hr>
             @foreach($Archivos as $Archivo)
-            <li><button onclick="vistaRapida('{{$Archivo}}')">{{$Archivo}}</button></li>
+            <li>
+                <button onclick="deleteFile('{{$Archivo}}')"><img id="imgDelete"
+                        src="{{asset('assets/icon/delete16.png')}}" title="Eliminar archivo" /></button>
+                <button onclick="vistaRapida('{{$Archivo}}')"><span class="text-primary">{{$Archivo}}</span></button>
+            </li>
+            <hr>
             @endforeach
         </ul>
     </div>
@@ -36,11 +46,12 @@ function vistaRapida(path) {
         }
     });
 }
+
+
 $(document).ready(function() {
     $("#accordion").accordion({
         collapsible: true
     });
 
 });
-
 </script>

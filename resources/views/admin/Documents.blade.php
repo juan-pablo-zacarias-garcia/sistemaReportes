@@ -18,16 +18,16 @@
                             <label>Departamento
                                 <select id="department" class="block mt-1 w-full" name="department">
                                     @php
-                                    $dirs = Storage::disk('documentos')->directories();
+                                    $deps=DB::select("select * from departments");
                                     @endphp
-                                    @foreach ($dirs as $dir)
-                                    <option value="{{$dir}}">{{$dir}}</option>
+                                    @foreach ($deps as $dep)
+                                    <option value="{{$dep->name}}">{{$dep->name}}</option>
                                     @endforeach
                                 </select>
                             </label>
                         </div>
                         <div class="mb-3">
-                            <input type="file"accept="application/pdf" name="file" id="inputFile" class="form-control">
+                            <input type="file" accept="application/pdf" name="file" id="inputFile" class="form-control">
                             <span class="text-danger" id="file-input-error"></span>
                         </div>
                         <div class="mb-3">
@@ -70,7 +70,7 @@
             let formData = new FormData(this);
             //se agrega al formData el departamento al que se cargará el archivo
             formData.append('department', $('#department').val());
-            
+
             $('#file-input-error').text('');
             //Se realiza la petición ajax para cargar el archivo
             $.ajax({
@@ -82,7 +82,9 @@
                 success: (response) => {
                     if (response) {
                         this.reset();
-                        
+                        if(response=="#"){
+                            window.alert("Error a cargar archivo. El archivo ya existe");
+                        }
                     }
                     refreshAcordeon();
                 },
@@ -94,17 +96,40 @@
 
         });
 
-        //Recarga los datos de la lista de departamentos con sus usuarios
-        function refreshAcordeon() {
-            $.ajax({
-                url: "listDocuments",
-                type: "GET"
-            }).done(function(data) {
-                $("#divAccordion").empty();
-                $("#divAccordion").append(data);
-            });
-        }
+
     });
+
+    //Elimina un archivo
+    function deleteFile(path) {
+        $.confirm({
+            title: '',
+            content: function() {
+                return "¿Está seguro de eliminar el documento: " + path + "?";
+            },
+            buttons: {
+                Eliminar: function() {
+                    $.ajax({
+                        url: "deleteFile/" + path,
+                        type: "GET"
+                    }).done(function(data) {
+                        refreshAcordeon();
+                    });
+                },
+                Cancelar: function() {}
+            }
+        });
+    }
+
+    //Recarga los datos de la lista de departamentos con sus usuarios
+    function refreshAcordeon() {
+        $.ajax({
+            url: "listDocuments",
+            type: "GET"
+        }).done(function(data) {
+            $("#divAccordion").empty();
+            $("#divAccordion").append(data);
+        });
+    }
     </script>
     @else
     <h1>Acceso denegado, su intento ha sido registrado</h1>

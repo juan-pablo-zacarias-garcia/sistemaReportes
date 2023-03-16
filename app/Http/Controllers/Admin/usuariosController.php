@@ -17,9 +17,8 @@ class usuariosController extends Controller
     //Devuelve los usuarios registrados menos el usuario autenticado en la sesion
     public function viewUsuarios(){
         if(auth()->user()->type==env('USER_ADMIN')){
-            $idUserAuth = auth()->user()->id;
-            $users = DataTables::of(User::where('id','!=',$idUserAuth))->results();
-            return view('admin.Usuarios',['users'=>$users]);
+            //$users = DataTables::of(User::where('id','!=',$idUserAuth))->results();
+            return view('admin.Usuarios'); 
         }
         else{
             return view("home");
@@ -53,7 +52,9 @@ class usuariosController extends Controller
     //////////////////////////////////Vistas////////////////////////////////
     public function tablaUsuarios(){
         if(auth()->user()->type==env('USER_ADMIN')){
-            return view('admin.recursosUsuarios.tablaUsuarios');
+            $idUserAuth = auth()->user()->id;
+            $users = User::where('id','!=',$idUserAuth)->get();
+            return view('admin.recursosUsuarios.tablaUsuarios',['users'=>$users]);
         }
         else{
             return view("home");

@@ -11,6 +11,16 @@
         </tr>
     </thead>
     <tbody>
+        @foreach($users as $user)
+        <tr>
+            <td>{{$user->id}}</td>
+            <td>{{$user->name}}</td>
+            <td>{{$user->email}}</td>
+            <td>{{$user->department}}</td>
+            <td>{{$user->created_at}}</td>
+            <td>{{$user->type}}</td>
+        </tr>
+        @endforeach
     </tbody>
 </table>
 <script type="text/javascript">
@@ -39,50 +49,20 @@ $(document).ready(function() {
             }
         },
         scrollY: 400,
-        select: true,
-        ajax: {
-            url: "{{route('datosUsuarios')}}",
-            dataSrc: 'data'
-        },
-        columns: [{
-                data: 'id',
-                name: 'ID'
-            },
-            {
-                data: 'name',
-                name: 'Nombre'
-            },
-            {
-                data: 'email',
-                name: 'Correo'
-            },
-            {
-                data: 'department',
-                name: 'Departamento'
-            },
-            {
-                data: 'created_at',
-                name: 'Fecha de registro'
-            },
-            {
-                data: 'type',
-                name: 'Rol'
-            },
-        ]
+        select: true
     });
 });
 //Evento al seleccionar fila de la tabla
 var rowSelected = null;
 $('#usuarios tbody').on('click', 'tr', function() {
 
-
     if (rowSelected != table.row(this).data()) {
         rowSelected = table.row(this).data();
         document.getElementById("editUser").hidden = false;
         document.getElementById("delUser").hidden = false;
         //Cambiamos el valor de los inputs ocultos en la vista Usuarios
-        document.getElementById('idUser').value = rowSelected.id;
-        document.getElementById('emailUser').value = rowSelected.email;
+        document.getElementById('idUser').value = rowSelected[0];
+        document.getElementById('emailUser').value = rowSelected[2];
     } else {
         document.getElementById("editUser").hidden = true;
         document.getElementById("delUser").hidden = true;
