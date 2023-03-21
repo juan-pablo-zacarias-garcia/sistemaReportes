@@ -17,7 +17,7 @@ $(document).ready(
             title: 'Nuevo departamento',
             content: "Se agregará un nuevo departamento",
             buttons: {
-                confirm: function() {
+                Agregar: function() {
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

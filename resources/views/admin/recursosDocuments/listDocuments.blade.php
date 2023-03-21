@@ -52,6 +52,7 @@ $(document).ready(function() {
     $("#accordion").accordion({
         collapsible: true
     });
+    $('#ui-id-1').trigger('click');
 
 });
 </script>

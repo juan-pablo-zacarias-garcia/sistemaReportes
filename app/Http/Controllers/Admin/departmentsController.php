@@ -27,7 +27,7 @@ class departmentsController extends Controller
         if(auth()->user()->type==env('USER_ADMIN')){
             //Recupera los departamentos de la BD y genera un directorio para cada departamento
             //Si el directorio ya existe, no lo crea
-            $departments=DB::select("select * from departments");
+            $departments=DB::select("select * from departments");            
             foreach($departments as $department){
                 Storage::disk('documentos')->makeDirectory($department->name);
             }

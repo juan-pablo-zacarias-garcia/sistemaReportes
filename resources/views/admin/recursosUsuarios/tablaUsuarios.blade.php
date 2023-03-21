@@ -16,9 +16,19 @@
             <td>{{$user->id}}</td>
             <td>{{$user->name}}</td>
             <td>{{$user->email}}</td>
-            <td>{{$user->department}}</td>
+            <td>
+                @php
+                $dep = DB::select("select * from departments where id=".$user->department);
+                echo $dep[0]->name;
+                @endphp
+            </td>
             <td>{{$user->created_at}}</td>
-            <td>{{$user->type}}</td>
+            <td>
+                @php
+                $dep = DB::select("select * from users_type where id=".$user->type);
+                echo $dep[0]->type;
+                @endphp
+            </td>
         </tr>
         @endforeach
     </tbody>
