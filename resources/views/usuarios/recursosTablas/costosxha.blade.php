@@ -21,12 +21,11 @@
             <td>
                 <form method="POST" action="{{ route('detallesTablas') }}">
                     @csrf
-                    <input name="tabla" type="hidden" value="tablaCostoXHa" />
+                    <input name="tabla" type="hidden" value="tablaVentasXHa" />
                     <input name="anio" type="hidden" value="{{$anio}}" />
                     <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
                     <input name="rancho" type="hidden" value="{{key($datos[0])}}" />
-                    <input type="submit"
-                        value="{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}" />
+                    <input class="alert-link" type="submit" value="{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}" />
                     <!-- <a href="/tablaDetalle/tablaCostoXHa/{{$anio.'/'.$fila->PRODUCTO.'/'.key($datos[0])}}">{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</a> -->
                 </form>
             </td>

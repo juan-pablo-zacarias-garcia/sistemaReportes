@@ -27,10 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); 
 });
-
+Route::get('error', [mainController::class, 'error'])->name('error');
 /////////////////////////////////////rutas de admin///////////////////////////////////////////
 require __DIR__.'/routes_admin.php';
-
 
 /////////////////////////////////////rutas de usaurios comunes///////////////////////////////////////////
 require __DIR__.'/routes_user.php';

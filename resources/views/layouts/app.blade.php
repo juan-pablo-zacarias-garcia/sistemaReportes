@@ -20,6 +20,7 @@
 </head>
 
 <body class="font-sans antialiased">
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         <!-- Barra de navegación para cada tipo de usuario-->
         @switch(Auth::user()->type)
@@ -48,5 +49,28 @@
         </main>
     </div>
 </body>
+<script type="text/javascript">
+var minutos = 0;
+$(document).ready(function() {
+    //incrementa minutos 
+    var idleInterval = setInterval(timerIncrement, 60000);
+    // 1 minuto
+    //Si hay actividad reinicia el timmer 
+    $(this).mousemove(function(e) {
+        minutos = 0;
+    });
+    $(this).keypress(function(e) {
+        minutos = 0;
+    });
+});
+
+function timerIncrement() {
+    minutos = minutos + 1;
+    if (minutos > 5) {
+        //Después de 5 minutos hace logout
+        document.getElementById('logout-form').submit();
+    }
+}
+</script>
 
 </html>

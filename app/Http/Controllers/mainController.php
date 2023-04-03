@@ -11,4 +11,9 @@ class mainController extends Controller
     {
         return view('home');
     }
+    public function error(Request $request)
+    {
+            return view('error');
+    }
 }
+

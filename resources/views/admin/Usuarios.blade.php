@@ -107,20 +107,6 @@
 
 
     });
-
-
-
-    function deleteUser(id) {
-        $.ajax({
-            url: "/deleteUser/" + id,
-            type: 'get',
-            success: function(data) {
-                if (data.result != 'true') {
-                    alert('El usuario ya existe: ');
-                }
-            }
-        });
-    }
     </script>
     @else
     <h1>Acceso denegado, su intento ha sido registrado</h1>

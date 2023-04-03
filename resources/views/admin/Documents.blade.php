@@ -27,7 +27,7 @@
                             </label>
                         </div>
                         <div class="mb-3">
-                            <input type="file" accept="application/pdf" name="file" id="inputFile" class="form-control">
+                            <input type="file" accept="application/pdf" name="file" id="inputFile" class="form-control" required>
                             <span class="text-danger" id="file-input-error"></span>
                         </div>
                         <div class="mb-3">

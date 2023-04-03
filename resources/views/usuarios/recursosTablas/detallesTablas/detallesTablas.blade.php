@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="{{asset('assets/css/keyTable.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/buttons.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/searchPanes.dataTables.min.css')}}" />
-
     <script src="{{asset('assets/js/jquery.js')}}"></script>
     <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('assets/js/dataTables.select.min.js')}}"></script>
@@ -14,7 +13,8 @@
     <script src="{{asset('assets/js/dataTables.searchPanes.min.js')}}"></script>
     <div class="col-12">
         <div class="py-12">
-            <div class="max-w-7xl mx-auto col-12 ">
+            <div class="max-w-7xl mx-auto col-12 " style="background-color:white;">
+            <button class="btn btn-secondary" onclick="history.back()">Regresar</button>
                 @include('usuarios.recursosTablas.horizontal')
             </div>
         </div>

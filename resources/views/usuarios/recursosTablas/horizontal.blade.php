@@ -54,7 +54,7 @@ $(document).ready(
             dom: 'Plfrtip',
             searchPanes: {
                 initCollapsed: true,
-                columns: [1, 4, 7],
+                columns: [1, 2, 4, 7],
                 dtOpts: {
                     select: {
                         style: 'multi'

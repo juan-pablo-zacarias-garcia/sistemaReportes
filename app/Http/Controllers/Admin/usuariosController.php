@@ -79,8 +79,7 @@ class usuariosController extends Controller
                 'department' => $request->department,
                 'password' => Hash::make($request->password),
             ]);
-    
-            return $this->viewUsuarios();
+            return true;
         }
         else{
             return view("home");

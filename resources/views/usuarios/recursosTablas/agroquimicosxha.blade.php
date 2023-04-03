@@ -12,9 +12,30 @@
     </thead>
     <tbody>
         @foreach($datos as $fila)
+        @php
+        reset($datos[0]);
+        @endphp
         <tr>
             @foreach($fila as $dato)
-            <td>{{$dato==0?'':(is_numeric($dato)?'$ '.number_format($dato, 2):$dato)}}</td>
+            @if (is_numeric($dato))
+            <td>
+                <form method="POST" action="{{ route('detallesTablas') }}">
+                    @csrf
+                    <input name="tabla" type="hidden" value="tablaVentasXHa" />
+                    <input name="anio" type="hidden" value="{{$anio}}" />
+                    <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
+                    <input name="rancho" type="hidden" value="{{key($datos[0])}}" />
+                    <input class="alert-link" type="submit"
+                        value="{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}" />
+                    <!-- <a href="/tablaDetalle/tablaCostoXHa/{{$anio.'/'.$fila->PRODUCTO.'/'.key($datos[0])}}">{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</a> -->
+                </form>
+            </td>
+            @else
+            <td>{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</td>
+            @endif
+            @php
+            next($datos[0]);
+            @endphp
             @endforeach
         </tr>
         @endforeach
