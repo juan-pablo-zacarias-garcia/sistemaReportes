@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Usuarios\tablasController;
+use App\Http\Controllers\Usuarios\graficasController;
 
 
 
@@ -25,4 +26,6 @@ Route::get('tablaFertilizantesXHa/{anio}',[tablasController::class, 'tablaFertil
 Route::get('tablaPlantulaXHa/{anio}',[tablasController::class, 'tablaPlantulaXHa'])->middleware(['auth', 'verified'])->name('tablaPlantulaXHa');
 //retorna la tabla de detalles
 Route::post('detallesTablas',[tablasController::class, 'tablaDetalle'])->middleware(['auth', 'verified'])->name('detallesTablas');
+//retorna las graficas de los promedio
+Route::get('graficas/{anio}',[graficasController::class, 'graficaPromedios'])->middleware(['auth', 'verified'])->name('graficas');
 ?>

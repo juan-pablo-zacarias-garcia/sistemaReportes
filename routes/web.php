@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\Archivos\archivosController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Mail\Mailables;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\mainController;
 use App\Http\Controllers\Api\apiController;
+use App\Mail\TestMail;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +53,6 @@ Route::get('datosTablas', [apiController::class,'getTablasJSON'])->middleware(['
 //Admin
 //Ruta para DataTable usuarios
 Route::get('datosUsuarios', [apiController::class,'getUsersJSON'])->middleware(['auth', 'verified'])->name('datosUsuarios');
-
 
 
 

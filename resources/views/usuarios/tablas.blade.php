@@ -70,71 +70,86 @@
                                         Plántula por
                                         hectarea</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a id="9" type="button" onclick="cargaTabla('9','graficas');" href="#"
+                                        class="nav-link">
+                                        Gráficas</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div id="pricipal" style="background-color:white;">
-                    <!-- Se agregan la tabla seleccionada con js -->
+                <div class="col-12">
+                    <div class="py-12">
+                        <div class="max-w-7xl mx-auto col-12 ">
+                            <div class="p-4 sm:p-12 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                                <div class="col-12 ">
+                                    <div id="pricipal" style="background-color:white;">
+                                        <!-- Se agregan la tabla seleccionada con js -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
+        <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
+        <script src="{{asset('assets/js/dataTables.select.min.js')}}"></script>
+        <script src="{{asset('assets/js/dataTables.keyTable.min.js')}}"></script>
+        <script src="{{asset('assets/js/dataTables.buttons.min.js')}}"></script>
+        <script src="{{asset('assets/js/dataTables.searchPanes.min.js')}}"></script>
+        <script type="text/javascript">
+        activo = '1';
+        var anio;
+        $(document).ready(function() {
 
-    </div>
-    <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('assets/js/dataTables.select.min.js')}}"></script>
-    <script src="{{asset('assets/js/dataTables.keyTable.min.js')}}"></script>
-    <script src="{{asset('assets/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('assets/js/dataTables.searchPanes.min.js')}}"></script>
-    <script type="text/javascript">
-    activo = '1';
-    var anio;
-    $(document).ready(function() {
+            $("#btnCargarTablas").click(
+                function() {
+                    anio = $('#selectAnio').val();
+                    $("#listaTablas").removeClass("hidden");
+                    $("#tablas_titulo").empty();
+                    $("#tablas_titulo").append("Tablas disponibles " + (anio == '0' ? 'de todos los años' :
+                        anio));
+                    $("#pricipal").empty();
+                }
+            );
 
-        $("#btnCargarTablas").click(
-            function() {
-                anio = $('#selectAnio').val();
-                $("#listaTablas").removeClass("hidden");
-                $("#tablas_titulo").empty();
-                $("#tablas_titulo").append("Tablas disponibles "+(anio=='0'?'de todos los años':anio));
-                $("#pricipal").empty();
-            }
-        );
-
-    });
-
-    function cargaTabla(item, tabla) {
-        //cargamos la tabla horizontal
-        tbl = $.ajax({
-            url: "/" + tabla + "/" + anio,
-            type: "GET",
-            beforeSend: function() {
-                $('#' + activo).removeClass("active");
-                $("#" + item).addClass("active");
-                activo = item;
-                $("#pricipal").empty();
-                $("#pricipal").append("<div class=''>Cargando...</div>");
-            },
-            error: function() {
-                $('#' + activo).removeClass("active");
-                $("#" + item).addClass("active");
-                activo = item;
-                $("#pricipal").empty();
-                $("#pricipal").append("<div class='text-danger'>Error al cargar la información</div>");
-            }
-        }).done(function() {
-            MostrarTabla(item, tbl);
         });
-    }
 
-    function MostrarTabla(choosen, tabla) {
-        $("#pricipal").empty();
-        $("#pricipal").append(tabla.responseText);
-        activo = choosen;
-    }
-    </script>
-    @else
-    <h1>Acceso denegado</h1>
-    @endif
+        function cargaTabla(item, tabla) {
+            //cargamos la tabla horizontal
+            tbl = $.ajax({
+                url: "/" + tabla + "/" + anio,
+                type: "GET",
+                beforeSend: function() {
+                    $('#' + activo).removeClass("active");
+                    $("#" + item).addClass("active");
+                    activo = item;
+                    $("#pricipal").empty();
+                    $("#pricipal").append("<div class=''>Cargando...</div>");
+                },
+                error: function() {
+                    $('#' + activo).removeClass("active");
+                    $("#" + item).addClass("active");
+                    activo = item;
+                    $("#pricipal").empty();
+                    $("#pricipal").append("<div class='text-danger'>Error al cargar la información</div>");
+                }
+            }).done(function() {
+                MostrarTabla(item, tbl);
+            });
+        }
+
+        function MostrarTabla(choosen, tabla) {
+            $("#pricipal").empty();
+            $("#pricipal").append(tabla.responseText);
+            activo = choosen;
+        }
+        </script>
+        @else
+        <h1>Acceso denegado</h1>
+        @endif
 
 </x-app-layout>
