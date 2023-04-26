@@ -5,8 +5,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/keyTable.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/buttons.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/searchPanes.dataTables.min.css')}}" />
-
-
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-multiselect.css')}}" />
     <div class="col-12">
         <div class="py-12">
             <div class="max-w-7xl mx-auto col-12 ">
@@ -14,14 +13,25 @@
                     <div class="col-12 ">
                         <h3 id="tablas_titulo">Tablas disponibles</h3>
                         <hr>
-                        <label>Año:
-                            <select id="selectAnio" class="">
-                                @foreach ($anios as $anio)
-                                <option value="{{$anio->ANIO}}">{{$anio->ANIO}}</option>
-                                @endforeach
-                                <option value="0">Todos</option>
-                            </select></label>
-                        <button id="btnCargarTablas" class="btn btn-danger">Cargar tablas</button>
+                        <div id="filtros">
+                            <label class="">Año:
+                                <select id="selectAnio" onChange="selectAnio()">
+                                    <option selected="true" disabled="disabled">Seleccione año</option>
+                                    @foreach ($anios as $anio)
+                                    <option value="{{$anio->ANIO}}">{{$anio->ANIO}}</option>
+                                    @endforeach
+                                    <!-- <option value="0">Todos</option> -->
+                                </select></label>
+
+                            <label id="OptselectMes" class="hidden">Mes:
+                                <select id="selectMes" multiple="multiple" onChange="selectMes()">
+
+                                </select></label>
+                            <label id="OptselectSemana" class="hidden" onChange="selectSemana()">Semana:
+                                <select id="selectSemana" multiple="multiple">
+
+                                </select></label>
+                        </div>
                         <hr>
                         <div id="listaTablas" class="hidden">
                             <ul class="nav nav-tabs">
@@ -79,7 +89,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
                     <div class="py-12">
                         <div class="max-w-7xl mx-auto col-12 ">
                             <div class="p-4 sm:p-12 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
@@ -91,7 +100,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
 
         </div>
@@ -100,29 +108,156 @@
         <script src="{{asset('assets/js/dataTables.keyTable.min.js')}}"></script>
         <script src="{{asset('assets/js/dataTables.buttons.min.js')}}"></script>
         <script src="{{asset('assets/js/dataTables.searchPanes.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('assets/js/bootstrap-multiselect.js')}}"></script>
         <script type="text/javascript">
         activo = '1';
         var anio;
-        $(document).ready(function() {
+        var selectedMeses;
+        var selectedSemanas;
 
-            $("#btnCargarTablas").click(
-                function() {
-                    anio = $('#selectAnio').val();
-                    $("#listaTablas").removeClass("hidden");
-                    $("#tablas_titulo").empty();
-                    $("#tablas_titulo").append("Tablas disponibles " + (anio == '0' ? 'de todos los años' :
-                        anio));
-                    $("#pricipal").empty();
+        // Funciones para filtrado
+        function selectAnio() {
+            anio = $('#selectAnio').val();
+            $("#listaTablas").removeClass("hidden");
+            $("#tablas_titulo").empty();
+            $("#tablas_titulo").append("Tablas disponibles " + (anio == '0' ? 'de todos los años' :
+                anio));
+            $("#pricipal").empty();
+            //ajax para recuperar los meses del año seleccionado
+            $.ajax({
+                url: "/getMeses/" + anio,
+                type: "GET",
+                success: function(data){
+                    meses = data;
+                    cargarMeses(meses);
+                    $("#OptselectMes").removeClass("hidden");
+                    //recuperamos los meses seleccionados
+                    select = document.getElementById('selectMes');
+                    selectedMeses = Array.from(select.selectedOptions, option => option.value);
+                },
+                error:function(response){
+                    console.log(response.responseJSON.message);
                 }
-            );
+            });
+        }
 
-        });
+        //función para cargar el arreglo de meses en el select
+        function cargarMeses(meses){
+            //cargamos los meses
+            //primero destruimos el select
+            $('#selectMes').multiselect('destroy');
+            //quitamos las opciones del select
+            $('#selectMes').empty();
+            //Agregamos las nuevas opciones
+            for(i=0; i<meses.length; i++){
+                $('#selectMes').append("<option value='"+meses[i].MES+"' selected>"+meses[i].MES+"</option>");
+            }
+            //contruimos el select multiple con su configuracion
+            $('#selectMes').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 450
+                
+            });
+            
+            selectMes();
+        }
+
+        //Carga las semanas disponibles de los meses seleccionados
+        function selectMes() {
+            //recuperamos los meses seleccionados
+            select = document.getElementById('selectMes');
+            selectedMeses = Array.from(select.selectedOptions, option => option.value);
+            
+            //Limpiamos el div principal
+            $("#pricipal").empty();
+
+            //configuramos el token
+            //Se configura ajax para que mande el token csrf
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            //creamos la variable para guardar los datos del formulario
+            let formData = new FormData();
+             //se agrega al formData la lista de meses y el año
+             formData.append('meses', selectedMeses);
+             formData.append('anio', anio);
+            //ajax para recuperar las semanas del mes seleccionado
+            $.ajax({
+                url: "{{ route('getSemanas') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    semanas = data;
+                    cargaSemanas(semanas);
+                    $("#OptselectSemana").removeClass("hidden");
+                    //recuperramos las semanas seleccionadas
+                    select = document.getElementById('selectSemana');
+                    selectedSemanas = Array.from(select.selectedOptions, option => option.value);
+                },
+                error: function(response){
+                    console.log(response.responseJSON.message);
+                }
+            });
+        }
+
+        //carga las semanas en el select
+        function cargaSemanas(semanas){
+            //cargamos las semanas
+            //primero destruimos el select
+            $('#selectSemana').multiselect('destroy');
+            //quitamos las opciones del select
+            $('#selectSemana').empty();
+            //Agregamos las nuevas opciones
+            for(i=0; i<semanas.length; i++){
+                $('#selectSemana').append("<option value='"+semanas[i].SEMANA+"' selected>"+semanas[i].SEMANA+"</option>");
+            }
+            //contruimos el select multiple con su configuracion
+            $('#selectSemana').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 450
+            });
+            selectSemana();
+        }
+
+        function selectSemana() {
+            //recuperramos las semanas seleccionadas
+            select = document.getElementById('selectSemana');
+            selectedSemanas = Array.from(select.selectedOptions, option => option.value);
+            //Limpiamos el div principal
+            $("#pricipal").empty();
+        }
+
+        // Termina parte de filtrado
 
         function cargaTabla(item, tabla) {
-            //cargamos la tabla horizontal
+
+             //creamos la variable para guardar los datos del formulario
+             let formData = new FormData();
+             //se agrega al formData la lista de meses
+             formData.append('anio', anio);
+             //se agrega al formData la lista de meses
+             formData.append('meses', selectedMeses);
+             //se agrega al form data la lista de semanas
+             formData.append('semanas', selectedSemanas);
+
+
+            //Se configura ajax para que mande el token csrf
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            //cargamos la tabla seleccionada con ajax
             tbl = $.ajax({
-                url: "/" + tabla + "/" + anio,
-                type: "GET",
+                url: "/" + tabla,
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
                 beforeSend: function() {
                     $('#' + activo).removeClass("active");
                     $("#" + item).addClass("active");
@@ -130,26 +265,33 @@
                     $("#pricipal").empty();
                     $("#pricipal").append("<div class=''>Cargando...</div>");
                 },
-                error: function() {
+                error: function(response) {
                     $('#' + activo).removeClass("active");
                     $("#" + item).addClass("active");
                     activo = item;
                     $("#pricipal").empty();
                     $("#pricipal").append("<div class='text-danger'>Error al cargar la información</div>");
+                    console.log(response.responseJSON.message);
                 }
             }).done(function() {
                 MostrarTabla(item, tbl);
             });
         }
-
+        //muestra la tabla seleccionada
         function MostrarTabla(choosen, tabla) {
+            //limpia el div principal
             $("#pricipal").empty();
+            //agrega la tabla devuelta por la petición AJAX
             $("#pricipal").append(tabla.responseText);
+            //cambia el item seleccionado
             activo = choosen;
         }
+
+        $(document).ready(function() {
+            $('#selectAnio').multiselect();
+        });
         </script>
         @else
         <h1>Acceso denegado</h1>
         @endif
-
 </x-app-layout>

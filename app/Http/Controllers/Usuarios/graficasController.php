@@ -14,9 +14,7 @@ class graficasController extends Controller
     function graficaPromedios(Request $request){
         if (auth()->user()->type == env('USER_COMUN')) {
 
-            //Si se envía el año = 0 entonces devuelve todos los años
-            $anio = ($request->anio == "0") ? "" : "AND ANIO=" . $request->anio;
-            $datos = DB::select(queryGraficaPromedios($anio));
+            $datos = DB::select(queryGraficaPromedios($request->anio, explode(',',$request->meses), explode(',',$request->semanas)));
             //almacenamos los valores de los encabezados de la tabla que seran las labels de la tabla (X)
             $labels=array();
             foreach($datos as $dato){
@@ -50,8 +48,6 @@ class graficasController extends Controller
                 $dataset_data->setData($dataset[$key]['data']);
                 array_push($datasets_datas, $dataset_data);
             }
-            // dd(json_encode($datasets_datas));
-
             //mandamos los datos para formar la tabla de la tabla
             return view('usuarios.recursosGraficas.graficaPromedios', ['labels'=>$labels,'datasets'=>json_encode($datasets_datas)]);
         } else {

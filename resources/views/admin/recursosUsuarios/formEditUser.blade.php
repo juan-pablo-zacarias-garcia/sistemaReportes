@@ -1,5 +1,7 @@
  <form method="POST" id="formEditUser" enctype="multipart/form-data">
      @csrf
+     <div id="status">
+    </div>
      <div class="form-group mt-4">
          <input id="id" name="id" value='{{$user->value("id")}}' hidden>
          <label for="exampleInputEmail1">Nombre</label>
@@ -10,22 +12,10 @@
          <label for="exampleInputEmail1">Correo</label>
          <input id="email" name="email" value='{{$user->value("email")}}' type="email" class="form-control"
              aria-describedby="emailHelp" placeholder="Enter email">
-         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
      </div>
      <div class="form-group mt-4">
-         <label for="exampleInputPassword1">Password</label>
-         <input id="password" name="password" type="password" class="form-control" id="exampleInputPassword1"
-             placeholder="Password">
-     </div>
-    
-     <div class="form-group mt-4">
-         <label for="exampleInputEmail1">Departamento</label>
-         <select id="department" class="block mt-1 w-full" name="department">
-            @foreach ($departments as $department)
-            <option value="{{$department->id}}" {{$department->id==$user->value("department")? 'selected':''}} >{{$department->name}}</option>
-            @endforeach
-        </select>
-     </div>
+         <label><input id="passwordreset" name="passwordreset" value="reset" type="checkbox" class="m-2">Restablecer contraseña</label>
+     </div>    
 
      <div class="form-group mt-4">
          <label for="exampleInputEmail1">Tipo de usuario</label>
@@ -58,7 +48,12 @@ $(document).ready(
                         url: "/updateUser",
                         type: 'POST',
                         data: $("#formEditUser").serialize(),
+                        beforeSend: function() {
+                            $("#status").empty();
+                            $("#status").append("<div class='text-success'><b>Actualizando datos...</b></div>");
+                        },
                         success: function(data) {
+                            $("#status").empty();
                             $.alert('Los datos del usuario: ' + data.email + " con id: " +
                                 data.id + " han sido actualizado");
                             //cargamos la tabla de los usuarios
@@ -70,6 +65,8 @@ $(document).ready(
                             //Cambiamos el valor de los inputs ocultos en la vista Usuarios
                             document.getElementById('idUser').value = "";
                             document.getElementById('emailUser').value = "";
+                            //quitamos la opcion para restablecer contraseña
+                            document.getElementById("passwordreset").checked=false;
                         }
                     });
                     //fin de ajax

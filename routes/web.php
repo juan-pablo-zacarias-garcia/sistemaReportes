@@ -55,5 +55,8 @@ Route::get('datosTablas', [apiController::class,'getTablasJSON'])->middleware(['
 Route::get('datosUsuarios', [apiController::class,'getUsersJSON'])->middleware(['auth', 'verified'])->name('datosUsuarios');
 
 
+Route::get('prueba', function () {
+    return view('prueba');
+});
 
 require __DIR__.'/auth.php';

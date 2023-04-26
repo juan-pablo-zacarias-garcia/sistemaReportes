@@ -14,5 +14,7 @@ DataTable{
 }
 
 Mas librerias disponibles para datatabla en: https://datatables.net/download/release
+jQuery-Multiple-Select-Plugin-For-Bootstrap-Bootstrap-Multiselect
+
 
 

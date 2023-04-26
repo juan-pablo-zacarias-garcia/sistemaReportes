@@ -45,17 +45,17 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        // $this->reportable(function (Throwable $e) {
-        //     //
+        $this->reportable(function (Throwable $e) {
+            //
+        });
+        // //Si un método no es permitido en una ruta lo regresa al home
+        // $this->renderable(function (MethodNotAllowedHttpException $e, $request) {
+        //     return redirect('home');
         // });
-        //Si un método no es permitido en una ruta lo regresa al home
-        $this->renderable(function (MethodNotAllowedHttpException $e, $request) {
-            return redirect('home');
-        });
 
-        //Si no se encuentra un recurso manda la siguiente vista
-        $this->renderable(function ( NotFoundHttpException $e, $request) {
-            return redirect('error');
-        });
+        // //Si no se encuentra un recurso manda la siguiente vista
+        // $this->renderable(function ( NotFoundHttpException $e, $request) {
+        //     return redirect('error');
+        // });
     }
 }

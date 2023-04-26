@@ -2,7 +2,7 @@
 <br />
 <h4>Fertilizantes por hectarea</h4>
 <hr>
-<table id="tablaFertilizantesXHa" class="table table-bordered table-condensed table-striped col-md-8">
+<table id="tablaFertilizantesXHa" class="table table-bordered table-condensed table-striped ">
     <thead>
         <tr>
             @foreach ($headers as $header)
@@ -11,27 +11,35 @@
         </tr>
     </thead>
     <tbody>
+    <!-- Datos para la tabla -->
     @foreach($datos as $fila)
+        <!-- Se reinicia el puntero que recorre el arreglo $datos[0] -->
         @php
         reset($datos[0]);
         @endphp
         <tr>
             @foreach($fila as $dato)
-            @if (is_numeric($dato))
             <td>
-                <form method="POST" action="{{ route('detallesTablas') }}">
-                    @csrf
-                    <input name="tabla" type="hidden" value="tablaVentasXHa" />
-                    <input name="anio" type="hidden" value="{{$anio}}" />
-                    <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
-                    <input name="rancho" type="hidden" value="{{key($datos[0])}}" />
-                    <input class="alert-link" type="submit" value="{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}" />
-                    <!-- <a href="/tablaDetalle/tablaCostoXHa/{{$anio.'/'.$fila->PRODUCTO.'/'.key($datos[0])}}">{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</a> -->
-                </form>
+                <!-- Si la llave del dato del arreglo es igual a producto entonces es la columna PRODUCTO y solo se imprime el valor, y no el formulario-->
+                @if(key($datos[0])=='PRODUCTO')
+                {{$dato}}
+                @else
+                <!-- Si el dato es $0.00 no imprime nada en el td, d elo contrario imprime el dato como un formulario para ver los detalles-->
+                    @if($dato!='$0.00')
+                    <form method="POST" action="{{ route('detallesTablas') }}">
+                        @csrf
+                        <input name="cols" type="hidden" value="{{$cols}}" />
+                        <input name="anio" type="hidden" value="{{$anio}}" />
+                        <input name="meses" type="hidden" value="{{$meses}}" />
+                        <input name="semanas" type="hidden" value="{{$semanas}}" />
+                        <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
+                        <input name="rancho" type="hidden" value="{{key($datos[0])}}" />
+                        <input class="alert-link" type="submit" value="{{$dato}}" />
+                    </form>
+                    @endif
+                @endif
             </td>
-            @else
-            <td>{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</td>
-            @endif
+            <!-- Pasamos a la próxima llave del arreglo datos[0] -->
             @php
             next($datos[0]);
             @endphp
@@ -45,7 +53,7 @@
 <br />
 <h4>Promedio de fertilizante por hectarea</h4>
 <hr>
-<table id="tablaFertilizantesPromedioXHa" class="table table-bordered table-condensed table-striped col-md-8">
+<table id="tablaFertilizantesPromedioXHa" class="table table-bordered table-condensed table-striped ">
     <thead>
         <tr>
             @foreach ($headers2 as $header)
@@ -54,25 +62,35 @@
         </tr>
     </thead>
     <tbody>
+    <!-- Reinicia el puntero de la KEY del arreglo, es la que dice el nombre de la columna -->
     @foreach($datos2 as $fila)
         @php
         reset($datos2[0]);
         @endphp
         <tr>
             @foreach($fila as $dato)
-            @if (is_numeric($dato))
             <td>
+                <!-- Si la columna es la de PRODUCTO entonces solo agrega el dato, no el formulario -->
+            @if(key($datos2[0])=='PRODUCTO')
+                {{$dato}}
+            @else
+            <!-- Si el dato es diferente de cero entonces muestra el dato con un formulario para ver los detalles -->
+                @if($dato!='$0.00')
                 <form method="POST" action="{{ route('detallesTablas') }}">
                     @csrf
+                    <input name="cols" type="hidden" value="{{$cols}}" />
                     <input name="anio" type="hidden" value="{{$anio}}" />
+                    <input name="meses" type="hidden" value="{{$meses}}" />
+                    <input name="semanas" type="hidden" value="{{$semanas}}" />
                     <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
                     <input name="rancho" type="hidden" value="all" />
-                    <input class="alert-link" type="submit" value="{{$dato==0?'':(is_numeric($dato) && key($datos2[0])!='Hectareas'?'$'.number_format($dato, 2):$dato)}}" />
+                    <input class="alert-link" type="submit"
+                        value="{{$dato}}" />
                 </form>
-            </td>
-            @else
-            <td>{{$dato==0?'':(is_numeric($dato)?'$'.number_format($dato, 2):$dato)}}</td>
+                @endif
             @endif
+            </td>
+            <!-- Pasa a la siguiente llave del arreglo -->
             @php
             next($datos2[0]);
             @endphp

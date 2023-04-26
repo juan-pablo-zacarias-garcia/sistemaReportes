@@ -5,7 +5,6 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Correo</th>
-            <th>Departamento</th>
             <th>Fecha de registro</th>
             <th>Rol</th>
         </tr>
@@ -16,12 +15,6 @@
             <td>{{$user->id}}</td>
             <td>{{$user->name}}</td>
             <td>{{$user->email}}</td>
-            <td>
-                @php
-                $dep = DB::select("select * from departments where id=".$user->department);
-                echo $dep[0]->name;
-                @endphp
-            </td>
             <td>{{$user->created_at}}</td>
             <td>
                 @php

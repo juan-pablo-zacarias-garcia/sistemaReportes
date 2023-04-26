@@ -1,6 +1,8 @@
 @if (Auth::user()->type==env('USER_ADMIN'))
 <form method="POST"  id="newUserForm" class="mt-6 space-y-6">
     @csrf
+    <div id="status">
+    </div>
     <!-- Name -->
     <div>
         <x-input-label for="name" :value="__('Nombre completo')" />
@@ -17,36 +19,11 @@
         <x-input-error :messages="$errors->get('email')" class="mt-2" />
     </div>
 
-    <!-- Department -->
-    <div class="mt-4">
-        <x-input-label for="department" :value="__('Departamento')" />
-        <select id="department" class="block mt-1 w-full" name="department">
-            @foreach ($departments as $department)
-            <option value="{{$department->id}}" >{{$department->name}}</option>
-            @endforeach
-        </select>
-    </div>
+
     <!-- Password -->
     <div class="mt-4">
-        <x-input-label for="password" :value="__('Contraseña')" />
-
-        <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-            autocomplete="new-password" />
-
-        <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        <label class="text-secondary">La contraseña debe ser de mínimo 8 caracteres</label>
+        <label class="text-secondary">La contraseña se genera automáticamente y será enviada al correo electrónico del usuario</label>
     </div>
-
-    <!-- Confirm Password -->
-    <div class="mt-4">
-        <x-input-label for="password_confirmation" :value="__('Confirma contraseña')" />
-
-        <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation"
-            required autocomplete="new-password" />
-
-        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-    </div>
-
     <div class="flex items-center justify-end mt-4">
         <button type="submit" id="btnNewUserForm"
             class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Agregar</button>
@@ -73,7 +50,12 @@ $(document).ready(
                         url: "/registerUser",
                         type: 'POST',
                         data: $("#newUserForm").serialize(),
+                        beforeSend: function() {
+                            $("#status").empty();
+                            $("#status").append("<div class='text-success'><b>Registrando usuario...</b></div>");
+                        },
                         success: function(data) {
+                            $("#status").empty();
                             $.confirm({
                                 title:'Usuario registrado',
                                 content:'El usuario ha sido registrado',
@@ -89,6 +71,7 @@ $(document).ready(
                             $("#tablaUsuarios").load('/tablaUsuarios');
                         },
                         error: function(data){
+                            $("#status").empty();
                             $.confirm({
                                 title:'Error al registrar usuario',
                                 content:'Revise los datos y vuelva a intentar',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Mail\mailController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -67,18 +68,23 @@ class usuariosController extends Controller
     public function registerUser(Request $request)
     {
         if(auth()->user()->type==env('USER_ADMIN')){
+
+            $password = $this->generaPassword();
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-                'password' => ['required', 'confirmed', Password::defaults()],
             ]);
     
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'department' => $request->department,
-                'password' => Hash::make($request->password),
+                'department' => '0',
+                'password' => Hash::make($password),
             ]);
+            
+            $mail = new mailController;
+            $mail->sendMailRegister($request->email, $password);
+
             return true;
         }
         else{
@@ -98,14 +104,16 @@ class usuariosController extends Controller
             if(isset($request->email)){
                 $user->email = $request->email;
             }
-            if(isset($request->password)){
-                $user->password = Hash::make($request->password);
+            if(isset($request->passwordreset)){
+                if($request->passwordreset=='reset'){
+                    $password = $this->generaPassword();
+                    $user->password = Hash::make($password);
+                    $mail = new mailController;
+                    $mail->sendMailResetPassword($request->email, $password);
+                }
             }
             if(isset($request->type)){
                 $user->type = $request->type;
-            }
-            if(isset($request->department)){
-                $user->department = $request->department;
             }
             
             $user->save();
@@ -119,7 +127,6 @@ class usuariosController extends Controller
         
     }
 
-
     //Elimina un usuario
     public function deleteUser($idUser){
         if(auth()->user()->type==env('USER_ADMIN')){
@@ -132,8 +139,17 @@ class usuariosController extends Controller
         }
         else{
             return view("home");
+        }    
+    }
+    function generaPassword(){
+        $string = "";
+        $possible = "*0+123456789bcdfg++1hj2k6mn3*p2*q8r9s0t0v6w7x2y*3z2";
+        $i = 0;
+        while ($i < 8) {
+            $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+            $string .= $char;
+            $i++;
         }
-        
-         
+        return $string;
     }
 }
