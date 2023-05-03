@@ -21,10 +21,9 @@
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}" />
 </head>
-
 <body class="font-sans antialiased">
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-    <div class="">
+    <div id="navbar" class="hidden">
         <!-- Barra de navegación para cada tipo de usuario-->
         @switch(Auth::user()->type)
         @case(env('USER_ADMIN'))
@@ -40,18 +39,20 @@
         <main>
             {{ $slot }}
         </main>
+        <div class="container">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
+                <div class="col-md-4 d-flex align-items-center">
+                    <span class="mb-3 mb-md-0 text-body-secondary">Agrícola Nieto S. de P.R. de R.L. de C.V.</span>
+                </div>
+            </footer>
+        </div>
     </div>
 </body>
-<div class="container">
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-            <span class="mb-3 mb-md-0 text-body-secondary">Agrícola Nieto S. de P.R. de R.L. de C.V.</span>
-        </div>
-    </footer>
-</div>
 <script type="text/javascript">
 var minutos = 0;
 $(document).ready(function() {
+    //muestra ya cargada la barra de navegación y el menú
+    $("#navbar").removeClass("hidden");
     //incrementa minutos 
     var idleInterval = setInterval(timerIncrement, 60000);
     // 1 minuto

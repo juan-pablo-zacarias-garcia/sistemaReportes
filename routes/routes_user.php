@@ -24,6 +24,17 @@ Route::post('tablaAgroquimicosXHa',[tablasController::class, 'tablaAgroquimicosX
 Route::post('tablaFertilizantesXHa',[tablasController::class, 'tablaFertilizantesXHa'])->middleware(['auth', 'verified'])->name('tablaFertilizantesXHa');
 //retorna la tabla de plantula por hectarea
 Route::post('tablaPlantulaXHa',[tablasController::class, 'tablaPlantulaXHa'])->middleware(['auth', 'verified'])->name('tablaPlantulaXHa');
+
+//retorna la tabla de fletes por hectarea
+Route::post('tablaFletesXHa',[tablasController::class, 'tablaFletesXHa'])->middleware(['auth', 'verified'])->name('tablaFletesXHa');
+//retorna la tabla de mano de obra por hectarea
+Route::post('tablaManoDeObraXHa',[tablasController::class, 'tablaManoDeObraXHa'])->middleware(['auth', 'verified'])->name('tablaManoDeObraXHa');
+//retorna la tabla de maquila por hectarea
+Route::post('tablaMaquilaXHa',[tablasController::class, 'tablaMaquilaXHa'])->middleware(['auth', 'verified'])->name('tablaMaquilaXHa');
+//retorna la tabla de empaque
+Route::post('tablaEmpaque',[tablasController::class, 'tablaEmpaque'])->middleware(['auth', 'verified'])->name('tablaEmpaque');
+
+
 //retorna la tabla de detalles
 Route::post('detallesTablas',[tablasController::class, 'tablaDetalle'])->middleware(['auth', 'verified'])->name('detallesTablas');
 //retorna las graficas de los promedio

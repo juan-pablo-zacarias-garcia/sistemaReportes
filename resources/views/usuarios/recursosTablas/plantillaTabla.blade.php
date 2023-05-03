@@ -1,8 +1,8 @@
 <br />
 <br />
-<h4>Rendimiento por hectarea</h4>
+<h4>{{$nombre}}</h4>
 <hr>
-<table id="tablaRendimientoXHa" class="table table-bordered table-condensed table-striped">
+<table id="tabla1" class="table table-bordered table-condensed table-striped ">
     <thead>
         <tr>
             @foreach ($headers as $header)
@@ -11,8 +11,8 @@
         </tr>
     </thead>
     <tbody>
-     <!-- Datos para la tabla -->
-     @foreach($datos as $fila)
+    <!-- Datos para la tabla -->
+    @foreach($datos as $fila)
         <!-- Se reinicia el puntero que recorre el arreglo $datos[0] -->
         @php
         reset($datos[0]);
@@ -25,13 +25,14 @@
                 {{$dato}}
                 @else
                 <!-- Si el dato es $0.00 no imprime nada en el td, d elo contrario imprime el dato como un formulario para ver los detalles-->
-                    @if($dato!='0.00 Kg')
+                    @if($dato!='$0.00' and $dato!='0.00 Kg')
                     <form method="POST" action="{{ route('detallesTablas') }}">
                         @csrf
                         <input name="cols" type="hidden" value="{{$cols}}" />
                         <input name="anio" type="hidden" value="{{$anio}}" />
                         <input name="meses" type="hidden" value="{{$meses}}" />
                         <input name="semanas" type="hidden" value="{{$semanas}}" />
+                        <input name="tipoCultivo" type="hidden" value="{{$tipoCultivo}}" />
                         <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
                         <input name="rancho" type="hidden" value="{{key($datos[0])}}" />
                         <input class="alert-link" type="submit" value="{{$dato}}" />
@@ -51,9 +52,9 @@
 
 <br />
 <br />
-<h4>Rendimiento promedio por hectarea</h4>
+<h4>Promedio de {{$nombre}}</h4>
 <hr>
-<table id="tablaRendimientoPromedioXHa" class="table table-bordered table-condensed table-striped">
+<table id="tabla2" class="table table-bordered table-condensed table-striped ">
     <thead>
         <tr>
             @foreach ($headers2 as $header)
@@ -75,13 +76,14 @@
                 {{$dato}}
             @else
             <!-- Si el dato es diferente de cero entonces muestra el dato con un formulario para ver los detalles -->
-                @if($dato!='0.00 Kg')
+                @if($dato!='$0.00' and $dato!='0.00 Kg')
                 <form method="POST" action="{{ route('detallesTablas') }}">
                     @csrf
                     <input name="cols" type="hidden" value="{{$cols}}" />
                     <input name="anio" type="hidden" value="{{$anio}}" />
                     <input name="meses" type="hidden" value="{{$meses}}" />
                     <input name="semanas" type="hidden" value="{{$semanas}}" />
+                    <input name="tipoCultivo" type="hidden" value="{{$tipoCultivo}}" />
                     <input name="producto" type="hidden" value="{{$fila->PRODUCTO}}" />
                     <input name="rancho" type="hidden" value="all" />
                     <input class="alert-link" type="submit"
@@ -100,13 +102,11 @@
     </tbody>
 </table>
 <script type="text/javascript">
-
 $(document).ready(
     function() {
         // Si existe una instancia condatatable la eliminamos para poder reiniciarla
-        $('#tablaRendimientoXHa').dataTable().fnDestroy();
-        
-        tablaRendimientoXHa = $('#tablaRendimientoXHa').DataTable({
+        $('#tabla1').dataTable().fnDestroy();
+        tabla1 = $('#tabla1').DataTable({
             'iDisplayLength': 25,
             language: {
                 "decimal": "",
@@ -135,9 +135,8 @@ $(document).ready(
         });
 
         // Si existe una instancia condatatable la eliminamos para poder reiniciarla
-        $('#tablaRendimientoPromedioXHa').dataTable().fnDestroy();
-        
-        tablaRendimientoPromedioXHa = $('#tablaRendimientoPromedioXHa').DataTable({
+        $('#tabla2').dataTable().fnDestroy();
+        tabla2 = $('#tabla2').DataTable({
             'iDisplayLength': 25,
             language: {
                 "decimal": "",
@@ -168,4 +167,3 @@ $(document).ready(
     }
 );
 </script>
- 

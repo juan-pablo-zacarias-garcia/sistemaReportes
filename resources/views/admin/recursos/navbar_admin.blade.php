@@ -11,7 +11,7 @@
             </label>
         </a>
         <a href="/" class="rounded mx-auto d-block">
-            <label class="display" Style="color:white; font-size: 40px !important;">Agrícola Nieto</label>
+            <label class="display" Style="color:white; font-size: 30px !important;">Agrícola Nieto</label>
         </a>
     </nav>
 </div>

@@ -23,6 +23,7 @@
             <x-input-label for="password" :value="__('Nueva contraseña')" />
             <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
+            <span class="text-primary">La contraseña debe ser de mínimo 8 caracteres</span>
         </div>
 
         <div>

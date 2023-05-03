@@ -14,14 +14,13 @@
         @foreach($datos as $fila)
         <tr>
             @foreach($fila as $dato)
-            <td>{{$dato==0?'':$dato}}</td>
+            <td>{{($dato=='$0.00' || $dato==0)?'':$dato}}</td>
             @endforeach
         </tr>
         @endforeach
     </tbody>
 </table>
-<!-- La API de DATATABLE nos permite realizar operaciones con los datos de la tabla -->
-<script src="{{asset('assets/js/sum().js')}}"></script>
+
 <script type="text/javascript">
 var tablaHorizontal;
 $(document).ready(

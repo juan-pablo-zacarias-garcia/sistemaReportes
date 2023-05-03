@@ -25,11 +25,14 @@
 
                             <label id="OptselectMes" class="hidden">Mes:
                                 <select id="selectMes" multiple="multiple" onChange="selectMes()">
-
                                 </select></label>
                             <label id="OptselectSemana" class="hidden" onChange="selectSemana()">Semana:
                                 <select id="selectSemana" multiple="multiple">
-
+                                </select></label>
+                            <label id="OptselectTipoCultivo" class="hidden" onChange="selectTipoCultivo()">Tipo de cultivo:
+                                <select id="selectTipoCultivo" multiple="multiple">
+                                    <option value="CONVENCIONAL" selected>CONVENCIONAL</option>
+                                    <option value="ORGANICO">ORGANICO</option>
                                 </select></label>
                         </div>
                         <hr>
@@ -81,7 +84,27 @@
                                         hectarea</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a id="9" type="button" onclick="cargaTabla('9','graficas');" href="#"
+                                    <a id="9" type="button" onclick="cargaTabla('9','tablaFletesXHa');" href="#"
+                                        class="nav-link">
+                                        Fletes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="11" type="button" onclick="cargaTabla('11','tablaManoDeObraXHa');" href="#"
+                                        class="nav-link">
+                                        Mano de obra</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="12" type="button" onclick="cargaTabla('12','tablaMaquilaXHa');" href="#"
+                                        class="nav-link">
+                                        Maquila</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="13" type="button" onclick="cargaTabla('13','tablaEmpaque');" href="#"
+                                        class="nav-link">
+                                        Empaque</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="10" type="button" onclick="cargaTabla('10','graficas');" href="#"
                                         class="nav-link">
                                         Gráficas</a>
                                 </li>
@@ -114,8 +137,9 @@
         var anio;
         var selectedMeses;
         var selectedSemanas;
+        var selectedTipoCultivo;
 
-        // Funciones para filtrado
+        //recupera los valores del select
         function selectAnio() {
             anio = $('#selectAnio').val();
             $("#listaTablas").removeClass("hidden");
@@ -162,7 +186,8 @@
             selectMes();
         }
 
-        //Carga las semanas disponibles de los meses seleccionados
+        //recupera los valores del select
+        //después de seleccionar los meses se cargan las semanas disponibles de los meses seleccionados
         function selectMes() {
             //recuperamos los meses seleccionados
             select = document.getElementById('selectMes');
@@ -170,7 +195,6 @@
             
             //Limpiamos el div principal
             $("#pricipal").empty();
-
             //configuramos el token
             //Se configura ajax para que mande el token csrf
             $.ajaxSetup({
@@ -223,18 +247,39 @@
             selectSemana();
         }
 
+        //recupera los valores del select
         function selectSemana() {
             //recuperramos las semanas seleccionadas
             select = document.getElementById('selectSemana');
             selectedSemanas = Array.from(select.selectedOptions, option => option.value);
             //Limpiamos el div principal
             $("#pricipal").empty();
+
+            //contruimos el select multiple con su configuracion
+            $('#selectTipoCultivo').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 450
+                
+            });
+            $('#OptselectTipoCultivo').removeClass("hidden");
+            //recuperramos el tipo de cultivo seleccionado
+            select = document.getElementById('selectTipoCultivo');
+            selectedTipoCultivo = Array.from(select.selectedOptions, option => option.value);
         }
+
+        //recupera los valores del select
+        function selectTipoCultivo() {
+            //recuperramos el tipo de cultivo seleccionado
+            select = document.getElementById('selectTipoCultivo');
+            selectedTipoCultivo = Array.from(select.selectedOptions, option => option.value);
+            //Limpiamos el div principal
+            $("#pricipal").empty();
+        }
+
 
         // Termina parte de filtrado
 
         function cargaTabla(item, tabla) {
-
              //creamos la variable para guardar los datos del formulario
              let formData = new FormData();
              //se agrega al formData la lista de meses
@@ -243,8 +288,9 @@
              formData.append('meses', selectedMeses);
              //se agrega al form data la lista de semanas
              formData.append('semanas', selectedSemanas);
-
-
+             //se agrega al form data el tipo de cultivo
+             formData.append('tipoCultivo', selectedTipoCultivo);
+             
             //Se configura ajax para que mande el token csrf
             $.ajaxSetup({
                 headers: {
@@ -270,7 +316,7 @@
                     $("#" + item).addClass("active");
                     activo = item;
                     $("#pricipal").empty();
-                    $("#pricipal").append("<div class='text-danger'>Error al cargar la información</div>");
+                    $("#pricipal").append("<div class='text-danger'>Sin datos disponibles</div>");
                     console.log(response.responseJSON.message);
                 }
             }).done(function() {
@@ -290,6 +336,8 @@
         $(document).ready(function() {
             $('#selectAnio').multiselect();
         });
+
+
         </script>
         @else
         <h1>Acceso denegado</h1>
