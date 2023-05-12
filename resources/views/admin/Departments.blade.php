@@ -28,7 +28,6 @@
 
         </div>
     </div>
-    </div>
     <script src="{{asset('assets/js/jquery.js')}}"></script>
     <script src="{{asset('assets/js/jquery-confirm.min.js')}}"></script>
     <script src="{{asset('assets/js/jquery-ui.js')}}"></script>

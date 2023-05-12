@@ -36,7 +36,7 @@
             <li><a href="/"><img src="{{asset('assets/img/agricola_nieto.png')}}" class="rounded mx-auto d-block"
                         width="50%" alt="AgricolaNieto"></a></li>
             <li><span>{{ Auth::user()->name }}</span></li>
-            <li><a href="{{route('tablas')}}">Tablas</a></li>
+            <li><a href="{{route('tablas')}}">Reportes</a></li>
             <li><a href="{{route('profile.edit')}}">Mi cuenta</a></li>
             <li>
                 <form method="POST" action="{{ route('logout') }}">

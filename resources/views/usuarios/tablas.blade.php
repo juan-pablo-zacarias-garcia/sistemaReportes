@@ -11,7 +11,7 @@
             <div class="max-w-7xl mx-auto col-12 ">
                 <div class="p-4 sm:p-12 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <div class="col-12 ">
-                        <h3 id="tablas_titulo">Tablas disponibles</h3>
+                        <h3 id="tablas_titulo">Reportes disponibles</h3>
                         <hr>
                         <div id="filtros">
                             <label class="">Año:
@@ -29,7 +29,8 @@
                             <label id="OptselectSemana" class="hidden" onChange="selectSemana()">Semana:
                                 <select id="selectSemana" multiple="multiple">
                                 </select></label>
-                            <label id="OptselectTipoCultivo" class="hidden" onChange="selectTipoCultivo()">Tipo de cultivo:
+                            <label id="OptselectTipoCultivo" class="hidden" onChange="selectTipoCultivo()">Tipo de
+                                cultivo:
                                 <select id="selectTipoCultivo" multiple="multiple">
                                     <option value="CONVENCIONAL" selected>CONVENCIONAL</option>
                                     <option value="ORGANICO">ORGANICO</option>
@@ -112,17 +113,14 @@
                         </div>
                     </div>
                 </div>
-                    <div class="py-12">
-                        <div class="max-w-7xl mx-auto col-12 ">
-                            <div class="p-4 sm:p-12 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                                <div class="col-12 ">
-                                    <div id="pricipal" style="background-color:white;">
-                                        <!-- Se agregan la tabla seleccionada con js -->
-                                    </div>
+                <br>
+                        <div class="p-4 sm:p-12 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                            <div class="col-12 ">
+                                <div id="pricipal" style="background-color:white;">
+                                    <!-- Se agregan la tabla seleccionada con js -->
                                 </div>
                             </div>
                         </div>
-                    </div>
             </div>
 
         </div>
@@ -144,14 +142,14 @@
             anio = $('#selectAnio').val();
             $("#listaTablas").removeClass("hidden");
             $("#tablas_titulo").empty();
-            $("#tablas_titulo").append("Tablas disponibles " + (anio == '0' ? 'de todos los años' :
+            $("#tablas_titulo").append("Reportes disponibles " + (anio == '0' ? 'de todos los años' :
                 anio));
             $("#pricipal").empty();
             //ajax para recuperar los meses del año seleccionado
             $.ajax({
                 url: "/getMeses/" + anio,
                 type: "GET",
-                success: function(data){
+                success: function(data) {
                     meses = data;
                     cargarMeses(meses);
                     $("#OptselectMes").removeClass("hidden");
@@ -159,30 +157,29 @@
                     select = document.getElementById('selectMes');
                     selectedMeses = Array.from(select.selectedOptions, option => option.value);
                 },
-                error:function(response){
+                error: function(response) {
                     console.log(response.responseJSON.message);
                 }
             });
         }
 
         //función para cargar el arreglo de meses en el select
-        function cargarMeses(meses){
+        function cargarMeses(meses) {
             //cargamos los meses
             //primero destruimos el select
             $('#selectMes').multiselect('destroy');
             //quitamos las opciones del select
             $('#selectMes').empty();
             //Agregamos las nuevas opciones
-            for(i=0; i<meses.length; i++){
-                $('#selectMes').append("<option value='"+meses[i].MES+"' selected>"+meses[i].MES+"</option>");
+            for (i = 0; i < meses.length; i++) {
+                $('#selectMes').append("<option value='" + meses[i].MES + "' selected>" + meses[i].MES + "</option>");
             }
             //contruimos el select multiple con su configuracion
             $('#selectMes').multiselect({
                 includeSelectAllOption: true,
                 maxHeight: 450
-                
+
             });
-            
             selectMes();
         }
 
@@ -192,7 +189,7 @@
             //recuperamos los meses seleccionados
             select = document.getElementById('selectMes');
             selectedMeses = Array.from(select.selectedOptions, option => option.value);
-            
+
             //Limpiamos el div principal
             $("#pricipal").empty();
             //configuramos el token
@@ -204,9 +201,9 @@
             });
             //creamos la variable para guardar los datos del formulario
             let formData = new FormData();
-             //se agrega al formData la lista de meses y el año
-             formData.append('meses', selectedMeses);
-             formData.append('anio', anio);
+            //se agrega al formData la lista de meses y el año
+            formData.append('meses', selectedMeses);
+            formData.append('anio', anio);
             //ajax para recuperar las semanas del mes seleccionado
             $.ajax({
                 url: "{{ route('getSemanas') }}",
@@ -214,7 +211,7 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function(data){
+                success: function(data) {
                     semanas = data;
                     cargaSemanas(semanas);
                     $("#OptselectSemana").removeClass("hidden");
@@ -222,22 +219,23 @@
                     select = document.getElementById('selectSemana');
                     selectedSemanas = Array.from(select.selectedOptions, option => option.value);
                 },
-                error: function(response){
+                error: function(response) {
                     console.log(response.responseJSON.message);
                 }
             });
         }
 
         //carga las semanas en el select
-        function cargaSemanas(semanas){
+        function cargaSemanas(semanas) {
             //cargamos las semanas
             //primero destruimos el select
             $('#selectSemana').multiselect('destroy');
             //quitamos las opciones del select
             $('#selectSemana').empty();
             //Agregamos las nuevas opciones
-            for(i=0; i<semanas.length; i++){
-                $('#selectSemana').append("<option value='"+semanas[i].SEMANA+"' selected>"+semanas[i].SEMANA+"</option>");
+            for (i = 0; i < semanas.length; i++) {
+                $('#selectSemana').append("<option value='" + semanas[i].SEMANA + "' selected>" + semanas[i].SEMANA +
+                    "</option>");
             }
             //contruimos el select multiple con su configuracion
             $('#selectSemana').multiselect({
@@ -259,7 +257,7 @@
             $('#selectTipoCultivo').multiselect({
                 includeSelectAllOption: true,
                 maxHeight: 450
-                
+
             });
             $('#OptselectTipoCultivo').removeClass("hidden");
             //recuperramos el tipo de cultivo seleccionado
@@ -280,17 +278,17 @@
         // Termina parte de filtrado
 
         function cargaTabla(item, tabla) {
-             //creamos la variable para guardar los datos del formulario
-             let formData = new FormData();
-             //se agrega al formData la lista de meses
-             formData.append('anio', anio);
-             //se agrega al formData la lista de meses
-             formData.append('meses', selectedMeses);
-             //se agrega al form data la lista de semanas
-             formData.append('semanas', selectedSemanas);
-             //se agrega al form data el tipo de cultivo
-             formData.append('tipoCultivo', selectedTipoCultivo);
-             
+            //creamos la variable para guardar los datos del formulario
+            let formData = new FormData();
+            //se agrega al formData la lista de meses
+            formData.append('anio', anio);
+            //se agrega al formData la lista de meses
+            formData.append('meses', selectedMeses);
+            //se agrega al form data la lista de semanas
+            formData.append('semanas', selectedSemanas);
+            //se agrega al form data el tipo de cultivo
+            formData.append('tipoCultivo', selectedTipoCultivo);
+
             //Se configura ajax para que mande el token csrf
             $.ajaxSetup({
                 headers: {
@@ -336,8 +334,6 @@
         $(document).ready(function() {
             $('#selectAnio').multiselect();
         });
-
-
         </script>
         @else
         <h1>Acceso denegado</h1>

@@ -1,5 +1,5 @@
 @if (Auth::user()->type==env('USER_ADMIN'))
-<table id="usuarios" class="table table-bordered table-condensed table-striped col-md-12">
+<table id="usuarios" class="table table-bordered table-condensed table-striped display nowrap " style="width:100%">
     <thead>
         <tr>
             <th>ID</th>
@@ -51,6 +51,7 @@ $(document).ready(function() {
                 "previous": "Anterior"
             }
         },
+        scrollX: true,
         scrollY: 400,
         select: true
     });

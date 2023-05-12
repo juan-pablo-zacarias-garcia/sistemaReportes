@@ -1,6 +1,5 @@
 <?php
 
-
 //////////retorna el where de las consultas de las tablas, el where se forma con el año, meses[] y semanas[]
 function filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo){
     $where = "";
@@ -53,7 +52,6 @@ function filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo){
     }
 }
 
-
 ////////////////////////obtiene los meses de un año del horizontal
 function queryMesesAnio($anio){
     return "SELECT DISTINCT MES from horizontal where TABLA!='0' AND ANIO=".$anio." order by MES ASC";
@@ -101,7 +99,6 @@ function queryHorizontal($anio, $meses, $semanas, $tipoCultivo)
     FORMAT(UTILIDAD_O_PERDIDA,'$#,##0.00') AS [UTILIDAD O PERDIDA] from horizontal WHERE CODIGO!='0' ".filtroWhereTablas($anio, $meses, $semanas,$tipoCultivo);
 }
 
-
 //recibe el año, meses[], semanas[], producto, rancho y las columnas(tipo string) que se mostrarán
 function queryDetalle($anio,$meses, $semanas, $producto,$rancho, $cols, $tipoCultivo)
 {
@@ -135,12 +132,9 @@ function queryCostoPromedioXHa($anio, $meses, $semanas, $tipoCultivo){
     return "Select PRODUCTO, FORMAT(sum(TOTAL_COSTO),'$#,##0.00') as [Costo Total], sum(HECTAREAS) Hectareas, FORMAT(sum(TOTAL_COSTO)/sum(HECTAREAS),'$#,##0.00') [Costo promedio por Ha] from horizontal where RANCHO!='0' " . filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo) . " group by PRODUCTO;";
 }
 
-
-
 function queryVentasXHa($Ranchos, $anio, $meses, $semanas, $tipoCultivo)
 {
     //Definimos las partes de la consulta
-    
     $queryP2 = '';
     $queryP3 = '';
     foreach ($Ranchos as $r) {
@@ -164,7 +158,6 @@ function queryVentasPromedioXHa($anio, $meses, $semanas, $tipoCultivo){
 }
 function queryRendimientoXHa($Ranchos, $anio, $meses, $semanas, $tipoCultivo){
     //Definimos las partes de la consulta
-    
     $queryP2='';
     $queryP3='';
     foreach($Ranchos as $r){
@@ -186,7 +179,6 @@ function queryRendimientoXHa($Ranchos, $anio, $meses, $semanas, $tipoCultivo){
 function queryRendimientoPromedioXHa($anio, $meses, $semanas, $tipoCultivo){
     return "Select PRODUCTO, FORMAT(sum(KGS_TOTALES),'#,##0.00 Kg') as [Total Kg], sum(HECTAREAS) Hectareas, FORMAT(sum(KGS_TOTALES)/sum(HECTAREAS),'#,##0.00 Kg') [Rendimiento promedio por Ha] from horizontal where RANCHO!='0' " . filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo) . " group by PRODUCTO;";
 }
-
 function queryResultadosXCultivo($Ranchos, $anio, $meses, $semanas, $tipoCultivo){
     //Definimos las partes de la consulta
     
@@ -208,7 +200,6 @@ function queryResultadosXCultivo($Ranchos, $anio, $meses, $semanas, $tipoCultivo
         sum(ResultadosXCultivo) FOR RANCHO IN (".$queryP3.")
         ) as tablaResultadosXCultivo";
 }
-
 function queryResultadosPromedioXCultivo($anio, $meses, $semanas, $tipoCultivo){
     return "Select PRODUCTO, FORMAT(sum(UTILIDAD_O_PERDIDA),'$#,##0.00') as [Utilidad o pérdida], sum(HECTAREAS) Hectareas, FORMAT(sum(UTILIDAD_O_PERDIDA)/sum(HECTAREAS),'$#,##0.00') [Utilidad o pérdida promedio por Ha] from horizontal where RANCHO!='0' " . filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo) . " group by PRODUCTO;";
 }
@@ -361,7 +352,6 @@ function queryMaquilaXHa($Ranchos, $anio, $meses, $semanas, $tipoCultivo){
 function queryMaquilaPromedioXHa($anio, $meses, $semanas, $tipoCultivo){
     return "Select PRODUCTO, FORMAT(sum(MAQUILA1),'$#,##0.00') as [Maquila], sum(HECTAREAS) Hectareas, FORMAT(sum(MAQUILA1)/sum(HECTAREAS),'$#,##0.00') [Promedio de maquila por Ha] from horizontal where RANCHO!='0' " . filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo) . " group by PRODUCTO;";
 }
-
 function queryEmpaque($Ranchos, $anio, $meses, $semanas, $tipoCultivo){
     //Definimos las partes de la consulta
     $queryP2='';
@@ -377,13 +367,12 @@ function queryEmpaque($Ranchos, $anio, $meses, $semanas, $tipoCultivo){
     $queryP3 = substr($queryP3, 0, strlen($queryP3)-1);
     return "SELECT PRODUCTO,
     ".$queryP2."
-    FROM (select RANCHO, PRODUCTO,  sum(TOTAL_COSTO_EMPAQUE+TOTAL_MERMAS)/sum(NO_CAJAS1) Empaque from horizontal where RANCHO!='0' ".filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo)." group by RANCHO, PRODUCTO) as tabla PIVOT (
-        sum(Empaque) FOR RANCHO IN (".$queryP3.")
+    FROM (select RANCHO, PRODUCTO,   case SUM(NO_CAJAS1) when 0 then 0 else sum(TOTAL_COSTO_EMPAQUE+TOTAL_MERMAS)/sum(NO_CAJAS1)  end  AS costoXCaja from horizontal where RANCHO!='0' ".filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo)." group by RANCHO, PRODUCTO) as tabla PIVOT (
+        sum(costoXCaja) FOR RANCHO IN (".$queryP3.")
         ) as tablaEmpaque";
 }
-
 function queryEmpaquePromedio($anio, $meses, $semanas, $tipoCultivo){
-    return "Select PRODUCTO, FORMAT(sum(TOTAL_COSTO_EMPAQUE+TOTAL_MERMAS),'$#,##0.00') as [Empaque], sum(NO_CAJAS1) [Cantidad de cajas] from horizontal where RANCHO!='0' " . filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo) . " group by PRODUCTO;";
+    return "Select PRODUCTO, FORMAT(sum(TOTAL_COSTO_EMPAQUE+TOTAL_MERMAS),'$#,##0.00') as [Empaque], FORMAT(sum(NO_CAJAS1), '#,##0.00') [Cantidad de cajas], FORMAT(case SUM(NO_CAJAS1) when 0 then 0 else (sum(TOTAL_COSTO_EMPAQUE+TOTAL_MERMAS)/sum(NO_CAJAS1))  end,'$#,##0.00')  AS [Costo por caja]  from horizontal where RANCHO!='0' " . filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo) . " group by PRODUCTO";
 }
 
 function queryGraficaPromedios($anio, $meses, $semanas, $tipoCultivo){
@@ -397,5 +386,4 @@ function queryGraficaPromedios($anio, $meses, $semanas, $tipoCultivo){
     sum(KGS_TOTALES)/sum(HECTAREAS) [Rendimiento promedio por Ha (KG)]
     from horizontal where RANCHO!='0' " . filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo) . " group by PRODUCTO;";
 }
-
 ?>

@@ -449,10 +449,10 @@ class tablasController extends Controller
                 $headers2[] = key($datos2[0]);
                 next($datos2[0]);
             }
-            $cols=" FORMAT(EMPAQUE1,'$#,##0.00') AS [EMPAQUE] ";
+            $cols=" FORMAT(NO_CAJAS1,'#,##0.00') AS [Cant. Cajas], FORMAT(TOTAL_COSTO_EMPAQUE,'$#,##0.00') AS [Total Costo Empaque], FORMAT(TOTAL_MERMAS,'$#,##0.00') AS [Mermas] ";
             //mandamos los datos para formar la tabla de la tabla
             return view('usuarios.recursosTablas.plantillaTabla', 
-            ['nombre'=>'Costos de empaque', 
+            ['nombre'=>'Costos de empaque por caja', 
             'rutaTabla'=>'tablaEmpaque',
             'datos' => $datos, 'headers' => $headers,  
             'datos2' => $datos2, 'headers2' => $headers2,

@@ -2,7 +2,7 @@
 <br />
 <h4>{{$nombre}}</h4>
 <hr>
-<table id="tabla1" class="table table-bordered table-condensed table-striped ">
+<table id="tabla1" class="table table-bordered table-condensed table-striped display nowrap" style="width:100%">
     <thead>
         <tr>
             @foreach ($headers as $header)
@@ -54,7 +54,7 @@
 <br />
 <h4>Promedio de {{$nombre}}</h4>
 <hr>
-<table id="tabla2" class="table table-bordered table-condensed table-striped ">
+<table id="tabla2" class="table table-bordered table-condensed table-striped display nowrap " style="width:100%">
     <thead>
         <tr>
             @foreach ($headers2 as $header)

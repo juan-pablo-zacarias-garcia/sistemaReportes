@@ -18,9 +18,10 @@
     <script type="text/javascript" src="{{asset('assets/js/popper.min.js')}}"></script>
     <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
     <!-- CSS -->
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}" />
 </head>
+
 <body class="font-sans antialiased">
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
     <div id="navbar" class="hidden">
@@ -39,10 +40,12 @@
         <main>
             {{ $slot }}
         </main>
-        <div class="container">
+    </div>
+    <div class="pt-4">
+        <div class="col-12 text-white" style="position: absolute; bottom:0; background-color:gray;">
             <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
                 <div class="col-md-4 d-flex align-items-center">
-                    <span class="mb-3 mb-md-0 text-body-secondary">Agrícola Nieto S. de P.R. de R.L. de C.V.</span>
+                    <span class="mb-3 ml-4 mb-md-0 text-body-secondary">Agrícola Nieto S. de P.R. de R.L. de C.V.</span>
                 </div>
             </footer>
         </div>
