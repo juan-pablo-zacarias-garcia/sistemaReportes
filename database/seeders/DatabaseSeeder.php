@@ -41,5 +41,15 @@ class DatabaseSeeder extends Seeder
             'type' => 1
         ]);
 
+        //inserta las cajas
+        DB::table('cajas')->insert(['PRODUCTO' => 'APIO', 'KILOSXCAJA'=>24]);
+        DB::table('cajas')->insert(['PRODUCTO' => 'BROCOLI', 'KILOSXCAJA'=>10]);
+        DB::table('cajas')->insert(['PRODUCTO' => 'BROCOLI FRESHCO', 'KILOSXCAJA'=>10]);
+        DB::table('cajas')->insert(['PRODUCTO' => 'BROCOLI ORGANICO', 'KILOSXCAJA'=>10]);
+        DB::table('cajas')->insert(['PRODUCTO' => 'COLIFLOR', 'KILOSXCAJA'=>10]);
+        DB::table('cajas')->insert(['PRODUCTO' => 'COLIFLOR FRESHCO', 'KILOSXCAJA'=>10]);
+        DB::table('cajas')->insert(['PRODUCTO' => 'COLIFLOR ORGANICO', 'KILOSXCAJA'=>10]);
+        DB::table('cajas')->insert(['PRODUCTO' => 'LECHUGA', 'KILOSXCAJA'=>19]);
+
     }
 }

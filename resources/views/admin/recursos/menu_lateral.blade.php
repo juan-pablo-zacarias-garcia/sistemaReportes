@@ -36,6 +36,7 @@
                         width="50%" alt="AgricolaNieto"></a></li>
             <li><span>{{ Auth::user()->name }}</span></li>
             <li><a href="{{route('viewUsuarios')}}">Usuarios</a></li>
+            <li><a href="{{route('tablas')}}">Reportes</a></li>
             <li><a href="{{route('profile.edit')}}">Mi cuenta</a></li>
             <li>
                 <form method="POST" action="{{ route('logout') }}">

@@ -12,7 +12,7 @@ class graficasController extends Controller
 {
     //
     function graficaPromedios(Request $request){
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type == env('USER_ADMIN')){
 
             $datos = DB::select(queryGraficaPromedios($request->anio, explode(',',$request->meses), explode(',',$request->semanas),explode(',',$request->tipoCultivo)));
             //almacenamos los valores de los encabezados de la tabla que seran las labels de la tabla (X)

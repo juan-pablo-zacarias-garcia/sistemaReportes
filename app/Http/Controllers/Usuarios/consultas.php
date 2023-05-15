@@ -104,7 +104,7 @@ function queryDetalle($anio,$meses, $semanas, $producto,$rancho, $cols, $tipoCul
 {
     $cols='ANIO as AÑO, MES, SEMANA, TABLA, PRODUCTO, RANCHO,FORMAT(HECTAREAS,\'#,##0.00\') AS HECTAREAS,'.$cols;
     $rancho = ($rancho=='all'?'':"AND RANCHO='".$rancho."'");
-    return "SELECT ".$cols." from horizontal WHERE CODIGO!='0' AND PRODUCTO='" .$producto. "' " . $rancho . " ".filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo);
+    return "SELECT ".$cols." from horizontal h left join cajas c on c.PROD= h.PRODUCTO WHERE CODIGO!='0' AND PRODUCTO='" .$producto. "' " . $rancho . " ".filtroWhereTablas($anio, $meses, $semanas, $tipoCultivo);
 }
 
 function queryCostoXHa($Ranchos, $anio, $meses, $semanas, $tipoCultivo)

@@ -11,7 +11,7 @@ class tablasController extends Controller
     //Retorna la vista principal de tablas
     public function tablas()
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             $anios = DB::select("SELECT DISTINCT ANIO from horizontal WHERE CODIGO!='0' ");
             //mandamos los datos para formar la tabla
             return view('usuarios.tablas', ['anios' => $anios]);
@@ -22,7 +22,7 @@ class tablasController extends Controller
     //Retorna la tabla horizontal
     public function tablaHorizontal(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
 
             //Si se envía el año = 0 entonces devuelve todos los años
             //la query recibe el año, un arreglo de meses y un arreglo de semanas para hacer la consulta
@@ -44,7 +44,7 @@ class tablasController extends Controller
     //Retorna la tabla costoXHa
     public function tablaCostoXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             $datos = DB::select(queryCostoXHa($Ranchos, $request->anio, explode(',',$request->meses), explode(',',$request->semanas), explode(',',$request->tipoCultivo)));
@@ -98,7 +98,7 @@ class tablasController extends Controller
     //Retorna la tabla ventas x hectarea
     public function tablaVentasXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
 
@@ -133,7 +133,7 @@ class tablasController extends Controller
     //Retorna la tabla rendimiento x hectarea
     public function tablaRendimientoXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
 
@@ -155,7 +155,9 @@ class tablasController extends Controller
                 $headers2[] = key($datos2[0]);
                 next($datos2[0]);
             }
-            $cols="FORMAT(KGS_TOTALES,'#,##0.00 KG') AS [KGS TOTALES],FORMAT((KGS_TOTALES/HECTAREAS)/6,'#,##0.00') AS [CAJAS POR HECTAREA] ,FORMAT(KGS_TOTALES/HECTAREAS,'#,##0.00 KG') AS [KGS POR HECTAREA]";
+            $col_cajas="case when c.KILOSXCAJA IS NULL then 'Sin definir' else FORMAT(KGS_TOTALES/KILOSXCAJA, '#,##0') end ";
+
+            $cols="FORMAT(KGS_TOTALES,'#,##0.00 KG') AS [KGS TOTALES],".$col_cajas." AS [CAJAS] ,FORMAT(KGS_TOTALES/HECTAREAS,'#,##0.00 KG') AS [KGS POR HECTAREA]";
             //mandamos los datos para formar la tabla de la tabla
             return view('usuarios.recursosTablas.plantillaTabla', 
             ['nombre'=>'Rendimiento por hectarea',
@@ -171,7 +173,7 @@ class tablasController extends Controller
     }
     public function tablaResultadosXCultivo(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             
@@ -208,7 +210,7 @@ class tablasController extends Controller
     }
     public function tablaAgroquimicosXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             
@@ -247,7 +249,7 @@ class tablasController extends Controller
 
     public function tablaFertilizantesXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             
@@ -283,7 +285,7 @@ class tablasController extends Controller
 
     public function tablaPlantulaXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             
@@ -322,7 +324,7 @@ class tablasController extends Controller
 
     public function tablaFletesXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             $datos = DB::select(queryFletesXHa($Ranchos, $request->anio, explode(',',$request->meses), explode(',',$request->semanas), explode(',',$request->tipoCultivo)));
@@ -358,7 +360,7 @@ class tablasController extends Controller
 
     public function tablaManoDeObraXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             $datos = DB::select(queryManoDeObraXHa($Ranchos, $request->anio, explode(',',$request->meses), explode(',',$request->semanas), explode(',',$request->tipoCultivo)));
@@ -394,7 +396,7 @@ class tablasController extends Controller
 
     public function tablaMaquilaXHa(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             $datos = DB::select(queryMaquilaXHa($Ranchos, $request->anio, explode(',',$request->meses), explode(',',$request->semanas), explode(',',$request->tipoCultivo)));
@@ -430,7 +432,7 @@ class tablasController extends Controller
 
     public function tablaEmpaque(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //consulta para obtener todos los ranchos que existen
             $Ranchos = DB::select(queryRanchos());
             $datos = DB::select(queryEmpaque($Ranchos, $request->anio, explode(',',$request->meses), explode(',',$request->semanas), explode(',',$request->tipoCultivo)));
@@ -467,7 +469,7 @@ class tablasController extends Controller
 
     public function tablaDetalle(Request $request)
     {
-        if (auth()->user()->type == env('USER_COMUN')) {            
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {            
             $datos = DB::select(queryDetalle($request->anio,explode(',',$request->meses), explode(',',$request->semanas),$request->producto, $request->rancho, $request->cols, explode(',',$request->tipoCultivo)));            
             //almacenamos los valores de los encabezados de la tabla 
             $headers = array();
@@ -484,7 +486,7 @@ class tablasController extends Controller
 
     //retorna un arreglo de objetos
     function getMeses(Request $request){
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             $meses = DB::select(queryMesesAnio($request->anio));
         return  $meses;
         }else{
@@ -494,7 +496,7 @@ class tablasController extends Controller
 
     //retorna un arreglo de objetos
     function getSemanas(Request $request){
-        if (auth()->user()->type == env('USER_COMUN')) {
+        if (auth()->user()->type == env('USER_COMUN') || auth()->user()->type==env('USER_ADMIN')) {
             //recibe los meses como un string separados con comas, los convertimos a un arreglo con la función explode
             $semanas = DB::select(querySemanasMes($request->anio,explode(',',$request->meses)));
         return  $semanas;
